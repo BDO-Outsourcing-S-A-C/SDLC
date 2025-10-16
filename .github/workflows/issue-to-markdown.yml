@@ -91,7 +91,7 @@ jobs:
             const file   = `${fileDt}__${codigo}__${slug || 'item'}.md`;
             const path   = `${folder}/${file}`;
 
-            // ---------- front-matter como array -> join('\n') ----------
+            // ---------- front-matter ----------
             let frontmatterLines = [];
             if (tipo === 'Requerimiento') {
               frontmatterLines = [
@@ -254,9 +254,9 @@ jobs:
               sha
             });
 
-            // ---------- comentar en el issue ----------
             const url = `https://github.com/${owner}/${repo}/blob/${defaultBranch}/${path}`;
             await github.issues.createComment({
               owner, repo, issue_number: issue.number,
               body: `📄 Se ${sha ? 'actualizó' : 'creó'} el documento **${codigo}**:\n\n- Ruta: \`${path}\`\n- Link: ${url}`
             });
+``
