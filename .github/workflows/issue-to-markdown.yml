@@ -1,0 +1,253 @@
+﻿name: Issue → Markdown (docs)
+
+on:
+  issues:
+    types: [opened, edited, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  generate-md:
+    # Solo corre si tiene alguna de las etiquetas esperadas
+    if: |
+      contains(join(github.event.issue.labels.*.name, ','), 'tipo:requerimiento') ||
+      contains(join(github.event.issue.labels.*.name, ','), 'tipo:cambio') ||
+      contains(join(github.event.issue.labels.*.name, ','), 'tipo:prueba')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Crear/actualizar Markdown desde el Issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            const repo  = context.repo.repo;
+            const owner = context.repo.owner;
+            const body  = issue.body || '';
+            const labels = (issue.labels || []).map(l => l.name);
+
+            // ---- helpers ----
+            function getField(label, variants = []) {
+              // Busca secciones tipo:
+              // "### <Label>\n<valor>\n### Otra sección" en el body del Issue
+              const all = [label].concat(variants);
+              for (const lab of all) {
+                const re = new RegExp(`^###\\s*${lab}\\s*\\n+([\\s\\S]*?)(?=^###\\s|\\Z)`, 'gmi');
+                const m = re.exec(body);
+                if (m && m[1]) return m[1].trim();
+              }
+              return '';
+            }
+            function slugify(s) {
+              return (s || '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase().replace(/[^a-z0-9]+/g,'-')
+                .replace(/(^-|-$)/g,'').substring(0,80);
+            }
+            function yyyymmdd(d) {
+              const y = d.getFullYear();
+              const m = String(d.getMonth()+1).padStart(2,'0');
+              const day = String(d.getDate()).padStart(2,'0');
+              return `${y}-${m}-${day}`;
+            }
+
+            // ---- determina tipo/ubicación ----
+            let tipo, folder, codePrefix;
+            if (labels.includes('tipo:requerimiento')) {
+              tipo = 'Requerimiento'; folder = 'docs/requerimientos'; codePrefix = 'RQ';
+            } else if (labels.includes('tipo:cambio')) {
+              tipo = 'Control de Cambio'; folder = 'docs/cambios'; codePrefix = 'CC';
+            } else if (labels.includes('tipo:prueba')) {
+              tipo = 'Prueba'; folder = 'docs/pruebas/actas'; codePrefix = 'PRB';
+            } else {
+              core.setFailed('Issue sin etiqueta tipo:* esperada'); return;
+            }
+
+            // ---- extrae campos del issue form ----
+            const sistema      = getField('Sistema');
+            const modulo       = getField('Módulo', ['Modulo']);
+            const descripcion  = getField('Descripción general', ['Descripción', 'Descripcion', 'Descripción general del cambio']);
+            const justificacion= getField('Justificación', ['Justificacion', 'Justificación (negocio/operativa/seguridad)']);
+            const impacto      = getField('Análisis de impacto', ['Analisis de impacto', 'Impacto']);
+            const solicitante  = getField('Solicitante');
+            const autorizado   = getField('Autorizado por', ['Autorizado']);
+            const esfuerzo     = getField('Esfuerzo estimado (horas)', ['Esfuerzo', 'Esfuerzo estimado']);
+            const costo        = getField('Costo asociado (S/ o USD)', ['Costo', 'Costo asociado']);
+            const intellisign  = getField('Aprobación (Intellisign URL/ID)', ['Intellisign', 'Aprobación']);
+            const criterios    = getField('Criterios de Aceptación', ['Criterios de Aceptacion']);
+            const rf           = getField('Requisitos Funcionales', ['Requisitos funcionales']);
+            const nfr          = getField('Requisitos No Funcionales', ['Requisitos no funcionales']);
+            const objetivo     = getField('Objetivo de la prueba', ['Objetivo']);
+            const alcance      = getField('Alcance y preparación', ['Alcance', 'Preparación', 'Preparacion']);
+            const casos        = getField('Casos de prueba');
+            const resultados   = getField('Resultados y evidencias', ['Resultados']);
+            const incidencias  = getField('Incidencias/Bugs detectados', ['Incidencias', 'Bugs']);
+
+            // ---- código / nombre archivo ----
+            const year = new Date(issue.created_at).getFullYear();
+            const codigo = `${codePrefix}-${year}-${String(issue.number).padStart(4,'0')}`;
+            const slug = slugify(issue.title.replace(/^((RQ|CC|PRB)\s*:)?\s*/i,''));
+            const fileDate = yyyymmdd(new Date(issue.created_at));
+            const filePath = `${folder}/${fileDate}__${codigo}__${slug || 'item'}.md`;
+
+            // ---- genera contenido por tipo ----
+            let content = '';
+            if (tipo === 'Requerimiento') {
+              content = `--- 
+tipo: "Requerimiento"
+codigo: "${codigo}"
+sistema: "${sistema}"
+modulo: "${modulo}"
+solicitante: "${solicitante}"
+prioridad: ""
+estado: "En Análisis"
+issue: ${issue.html_url}
+---
+
+# Requerimiento: ${issue.title}
+
+## 1. Descripción
+${descripcion || ''}
+
+## 2. Alcance
+${alcance || ''}
+
+## 3. Requisitos Funcionales
+${rf || '- RF-01: …'}
+
+## 4. Requisitos No Funcionales
+${nfr || '- Seguridad: …'}
+
+## 5. Criterios de Aceptación
+${criterios || '- [ ] Dado/Cuando/Entonces …'}
+
+## 6. Dependencias
+- (Completar)
+
+## 7. Evidencias
+- (Links a mockups/diagramas)
+
+## 8. Trazabilidad
+- Cambios: (CC-…)
+- Casos de prueba: (CP-…)
+- PRs: (#…)
+`;
+            } else if (tipo === 'Control de Cambio') {
+              content = `---
+tipo: "Control de Cambio"
+codigo: "${codigo}"
+sistema: "${sistema}"
+modulo: "${modulo}"
+solicitante: "${solicitante}"
+autorizado_por: "${autorizado}"
+esfuerzo_horas: ${esfuerzo || 0}
+costo_monetario: "${costo || ''}"
+intellisign: "${intellisign || ''}"
+estado: "En Análisis"
+issue: ${issue.html_url}
+---
+
+# Control de Cambios: ${issue.title}
+
+## 1. Descripción
+${descripcion || ''}
+
+## 2. Análisis de Impacto
+${impacto || ''}
+
+## 3. Alcance
+${alcance || ''}
+
+## 4. Plan de Trabajo
+- Desarrollo: …
+- QA: …
+- Producción: …
+
+## 5. Riesgos y Mitigaciones
+- …
+
+## 6. Evidencias
+- …
+
+## 7. Historial por Ambiente
+- **Desarrollo**: fecha, quién, evidencia
+- **QA**: fecha, quién, evidencia
+- **Producción**: fecha, quién, evidencia
+`;
+            } else {
+              // Prueba
+              content = `---
+tipo: "Prueba"
+codigo: "${codigo}"
+sistema: "${sistema}"
+modulo: "${modulo}"
+estado: "Planificada"
+issue: ${issue.html_url}
+---
+
+# Plan/Acta de Pruebas: ${issue.title}
+
+## 1. Objetivos
+${objetivo || ''}
+
+## 2. Alcance y Preparación
+${alcance || ''}
+
+## 3. Casos de Prueba
+${casos || `| ID | Título | Pasos | Esperado |
+|----|--------|-------|----------|
+| CP-01 | … | … | … |`}
+
+## 4. Resultados
+${resultados || '- CP-01: ✅ / ❌ — Evidencia: …'}
+
+## 5. Incidencias
+${incidencias || '- BUG-001: …'}
+
+## 6. Conclusiones
+- Checklist de aceptación: …
+`;
+            }
+
+            // ---- crea/actualiza archivo en rama por defecto ----
+            const defaultBranch = context.payload.repository.default_branch;
+
+            // Busca si ya existe para obtener SHA
+            let existingSha = undefined;
+            try {
+              const res = await github.repos.getContent({
+                owner, repo, path: filePath, ref: defaultBranch
+              });
+              if (Array.isArray(res.data)) {
+                core.warning('La ruta apunta a un directorio, se esperaba archivo.');
+              } else {
+                existingSha = res.data.sha;
+              }
+            } catch (e) {
+              // 404 = no existe => crear
+            }
+
+            const commitMessage = existingSha
+              ? `docs: update ${codigo} from issue #${issue.number}`
+              : `docs: create ${codigo} from issue #${issue.number}`;
+
+            await github.repos.createOrUpdateFileContents({
+              owner, repo,
+              path: filePath,
+              message: commitMessage,
+              content: Buffer.from(content, 'utf8').toString('base64'),
+              branch: defaultBranch,
+              sha: existingSha
+            });
+
+            // Comenta en el Issue con el link al archivo
+            const url = `https://github.com/${owner}/${repo}/blob/${defaultBranch}/${filePath}`;
+            await github.issues.createComment({
+              owner, repo, issue_number: issue.number,
+              body: `📄 Se ${existingSha ? 'actualizó' : 'creó'} el documento **${codigo}**:\n\n- Ruta: \`${filePath}\`\n- Link: ${url}`
+            });
+
+            core.setOutput('file', filePath);
