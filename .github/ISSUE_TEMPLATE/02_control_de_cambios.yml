@@ -1,8 +1,26 @@
 name: "Control de Cambios"
-description: "STI-ST-916 • Solicitar y gestionar un cambio"
-title: "CC: {sistema}/{modulo} - {titulo corto}"
-labels: ["Type:Feature"]
+description: "STI-ST-916 • Solicitud de mejora o cambio de software"
+title: "STI-ST-916-{sistema}/{modulo} - {titulo corto}"
+labels: ["Feature"]
 body:
+
+  - type: dropdown
+    id: Categorizacion
+    attributes:
+      label: Categorizacion
+      options: ["Interno","Publico","Restringifo","Confidencial"]
+    validations:
+      required: true
+    default: 0   # preselecciona la primera opción (Interno)
+
+  - type: dropdown
+    id: Modulo
+    attributes:
+      label: Sistema
+      options: ["Smartsys","MyReporting","Novedades","RPA","Otro"]
+    validations:
+      required: true
+    default: 0   # preselecciona la primera opción (SMARTSYS)
 
   - type: input
     id: modulo
