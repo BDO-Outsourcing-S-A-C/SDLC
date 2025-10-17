@@ -1,34 +1,8 @@
 name: "Control de Cambios"
-description: "STI-ST-916 • Solicitud de mejora o cambio de software"
-title: "STI-ST-916-{sistema}/{modulo} - {titulo corto}"
-labels:
-  - "Feature"
-
+description: "STI-ST-916 • Solicitar y gestionar un cambio"
+title: "CC: {sistema}/{modulo} - {titulo corto}"
+labels: ["Feature"]
 body:
-  - type: dropdown
-    id: categorizacion
-    attributes:
-      label: Categorización
-      options:
-        - "Interno"
-        - "Público"
-        - "Restringido"
-        - "Confidencial"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: sistema
-    attributes:
-      label: Sistema
-      options:
-        - "Smartsys"
-        - "MyReporting"
-        - "Novedades"
-        - "RPA"
-        - "Otro"
-    validations:
-      required: true
 
   - type: input
     id: modulo
@@ -38,6 +12,7 @@ body:
     validations:
       required: true
 
+  # ← Campo con texto predeterminado
   - type: textarea
     id: descripcion
     attributes:
@@ -129,8 +104,8 @@ body:
     id: checklist
     attributes:
       label: Checklist de calidad
-    options:
-      - label: "Impacto de seguridad revisado"
-      - label: "Casos de prueba definidos"
-      - label: "Plan de rollback definido"
-      - label: "Aprobación del responsable registrada"
+      options:
+        - label: "Impacto de seguridad revisado"
+        - label: "Casos de prueba definidos"
+        - label: "Plan de rollback definido"
+        - label: "Aprobación del responsable registrada"
