@@ -1,10 +1,12 @@
 name: "Control de Cambios"
 description: "STI-ST-916 • Solicitud de mejora o cambio de software"
 title: "STI-ST-916-{sistema}/{modulo} - {titulo corto}"
-labels: ["Feature"]
+labels:
+  - "Feature"
+
 body:
   - type: dropdown
-    id: Categorizacion
+    id: categorizacion
     attributes:
       label: Categorización
       options:
@@ -14,10 +16,9 @@ body:
         - "Confidencial"
     validations:
       required: true
-    default: 0
 
   - type: dropdown
-    id: Sistema
+    id: sistema
     attributes:
       label: Sistema
       options:
@@ -96,3 +97,41 @@ body:
       placeholder: "Nombre Apellido (Cargo)"
 
   - type: input
+    id: esfuerzo
+    attributes:
+      label: Esfuerzo estimado (horas)
+      placeholder: "Ej.: 40.5"
+
+  - type: input
+    id: costo
+    attributes:
+      label: Costo asociado (S/ o USD)
+      placeholder: "Ej.: S/ 1,593.17"
+
+  - type: input
+    id: intellisign
+    attributes:
+      label: Aprobación (Intellisign URL/ID)
+      placeholder: "https://cloud.intellisign.net/#/public/copia-autentica ..."
+
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Evidencias
+      description: "Adjunta enlaces a capturas, logs, PRs o pruebas."
+      value: |
+        - Capturas:
+        - Logs:
+        - PRs relacionados:
+        - Actas de pruebas:
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist de calidad
+    options:
+      - label: "Impacto de seguridad revisado"
+      - label: "Casos de prueba definidos"
+      - label: "Plan de rollback definido"
+      - label: "Aprobación del responsable registrada"
+``
