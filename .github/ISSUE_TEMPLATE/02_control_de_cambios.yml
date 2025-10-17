@@ -3,24 +3,31 @@ description: "STI-ST-916 • Solicitud de mejora o cambio de software"
 title: "STI-ST-916-{sistema}/{modulo} - {titulo corto}"
 labels: ["Feature"]
 body:
-
   - type: dropdown
     id: Categorizacion
     attributes:
-      label: Categorizacion
-      options: ["Interno","Publico","Restringifo","Confidencial"]
+      label: Categorización
+      options:
+        - "Interno"
+        - "Público"
+        - "Restringido"
+        - "Confidencial"
     validations:
       required: true
-    default: 0   # preselecciona la primera opción (Interno)
+    default: 0
 
   - type: dropdown
-    id: Modulo
+    id: Sistema
     attributes:
       label: Sistema
-      options: ["Smartsys","MyReporting","Novedades","RPA","Otro"]
+      options:
+        - "Smartsys"
+        - "MyReporting"
+        - "Novedades"
+        - "RPA"
+        - "Otro"
     validations:
       required: true
-    #default: 0   # preselecciona la primera opción (SMARTSYS)
 
   - type: input
     id: modulo
@@ -30,7 +37,6 @@ body:
     validations:
       required: true
 
-  # ← Campo con texto predeterminado
   - type: textarea
     id: descripcion
     attributes:
@@ -90,40 +96,3 @@ body:
       placeholder: "Nombre Apellido (Cargo)"
 
   - type: input
-    id: esfuerzo
-    attributes:
-      label: Esfuerzo estimado (horas)
-      placeholder: "Ej.: 40.5"
-
-  - type: input
-    id: costo
-    attributes:
-      label: Costo asociado (S/ o USD)
-      placeholder: "Ej.: S/ 1,593.17"
-
-  - type: input
-    id: intellisign
-    attributes:
-      label: Aprobación (Intellisign URL/ID)
-      placeholder: "https://cloud.intellisign.net/#/public/copia-autentica ..."
-
-  - type: textarea
-    id: evidencias
-    attributes:
-      label: Evidencias
-      description: "Adjunta enlaces a capturas, logs, PRs o pruebas."
-      value: |
-        - Capturas:
-        - Logs:
-        - PRs relacionados:
-        - Actas de pruebas:
-
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: Checklist de calidad
-      options:
-        - label: "Impacto de seguridad revisado"
-        - label: "Casos de prueba definidos"
-        - label: "Plan de rollback definido"
-        - label: "Aprobación del responsable registrada"
