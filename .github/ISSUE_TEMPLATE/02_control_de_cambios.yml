@@ -1,40 +1,111 @@
 name: "Control de Cambios"
-description: "STI-ST-916 � Solicita y gestiona un cambio"
+description: "STI-ST-916 • Solicitar y gestionar un cambio"
 title: "CC: {sistema}/{modulo} - {titulo corto}"
 labels: ["tipo:cambio"]
 body:
-  - type: dropdown
-    id: sistema
-    attributes:
-      label: Sistema
-      options: ["SMARTSYS","MyReporting","MDW","Otro"]
-    validations: { required: true }
+
   - type: input
     id: modulo
-    attributes: { label: M�dulo }
-    validations: { required: true }
+    attributes:
+      label: Módulo
+      placeholder: "p. ej., MDW / Panel CTC / Login"
+    validations:
+      required: true
+
+  # ← Campo con texto predeterminado
   - type: textarea
     id: descripcion
-    attributes: { label: Descripci�n general del cambio }
-    validations: { required: true }
-  - type: textarea
-    id: justificacion
-    attributes: { label: Justificaci�n (negocio/operativa/seguridad) }
+    attributes:
+      label: Descripción general del cambio
+      description: "Resume el objetivo del cambio y el problema que soluciona."
+      value: |
+        ## Plantilla sugerida (edita libremente)
+        **Contexto**: _Describe el problema/solicitud y el impacto actual._
+        **Objetivo del cambio**: _Qué se busca lograr y por qué._
+        **Alcance**:
+        - Sistemas/Módulos involucrados:
+        - Ambientes: Desarrollo / QA / Producción
+        - Fuera de alcance:
+        **Suposiciones**:
+        - ...
+        **Criterios de éxito**:
+        - ...
+        **Métricas** (si aplica):
+        - ...
+    validations:
+      required: true
+
   - type: textarea
     id: impacto
-    attributes: { label: An�lisis de impacto (elementos afectados) }
+    attributes:
+      label: Análisis de impacto
+      description: "Elementos afectados, compatibilidad, seguridad y riesgos."
+      value: |
+        **Elementos afectados**: tablas, endpoints, jobs, UI, permisos.
+        **Compatibilidad**: ¿rompe API? ¿requiere migraciones?
+        **Seguridad**: headers, TLS, XSS, dependencias.
+        **Riesgos**: ...
+        **Mitigaciones**: ...
+
+  - type: textarea
+    id: plan
+    attributes:
+      label: Plan de trabajo
+      value: |
+        **Desarrollo**:
+        - Tareas:
+        - Responsable:
+        **QA**:
+        - Casos/pruebas:
+        - Responsable:
+        **Producción**:
+        - Ventana/pase:
+        - Rollback:
+        **Comunicaciones**:
+        - Stakeholders:
+        - Aprobaciones:
+
   - type: input
     id: autorizado_por
-    attributes: { label: Autorizado por }
+    attributes:
+      label: Autorizado por
+      placeholder: "Nombre Apellido (Cargo)"
+
   - type: input
     id: esfuerzo
-    attributes: { label: Esfuerzo estimado (horas) }
+    attributes:
+      label: Esfuerzo estimado (horas)
+      placeholder: "Ej.: 40.5"
+
   - type: input
     id: costo
-    attributes: { label: Costo asociado (S/ o USD) }
+    attributes:
+      label: Costo asociado (S/ o USD)
+      placeholder: "Ej.: S/ 1,593.17"
+
   - type: input
     id: intellisign
-    attributes: { label: Aprobaci�n (Intellisign URL/ID) }
+    attributes:
+      label: Aprobación (Intellisign URL/ID)
+      placeholder: "https://cloud.intellisign.net/#/public/copia-autentica ..."
+
   - type: textarea
-    id: evidencia
-    attributes: { label: Evidencias y validaciones }
+    id: evidencias
+    attributes:
+      label: Evidencias
+      description: "Adjunta enlaces a capturas, logs, PRs o pruebas."
+      value: |
+        - Capturas:
+        - Logs:
+        - PRs relacionados:
+        - Actas de pruebas:
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist de calidad
+      options:
+        - label: "Impacto de seguridad revisado"
+        - label: "Casos de prueba definidos"
+        - label: "Plan de rollback definido"
+        - label: "Aprobación del responsable registrada"
