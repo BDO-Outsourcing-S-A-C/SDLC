@@ -1,7 +1,7 @@
 name: "Control de Cambios"
 description: "STI-ST-916 • Solicitar y gestionar un cambio"
 title: "CC: {sistema}/{modulo} - {titulo corto}"
-labels: ["Issue Type:Feature"]
+labels: ["Type:Feature"]
 body:
 
   - type: input
