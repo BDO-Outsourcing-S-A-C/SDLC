@@ -20,7 +20,7 @@ body:
       options: ["Smartsys","MyReporting","Novedades","RPA","Otro"]
     validations:
       required: true
-    default: 0   # preselecciona la primera opción (SMARTSYS)
+    #default: 0   # preselecciona la primera opción (SMARTSYS)
 
   - type: input
     id: modulo
