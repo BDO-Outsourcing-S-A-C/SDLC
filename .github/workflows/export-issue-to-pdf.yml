@@ -1,0 +1,165 @@
+name: Export Issue to PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Número del issue a exportar"
+        required: true
+        type: number
+      commit_to_repo:
+        description: "Guardar PDF en el repo (docs/exports/issues)"
+        required: false
+        default: false
+        type: boolean
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write   # necesario si activas commit_to_repo
+  issues: read
+
+jobs:
+  export:
+    # Ejecuta si lo llamas manualmente o si etiquetaste el issue con export:pdf
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'export:pdf')) }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolver número de Issue
+        id: resolve
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "num=${{ inputs.issue_number }}" >> $GITHUB_OUTPUT
+          else
+            echo "num=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Construir HTML desde Issue + Comentarios
+        id: build
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const issue_number = Number('${{ steps.resolve.outputs.num }}');
+
+            // 1) Traer issue y comentarios
+            const { data: issue } = await github.rest.issues.get({ owner, repo, issue_number });
+            const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number, per_page: 100 });
+
+            const labels = (issue.labels || []).map(l => (typeof l === 'string' ? l : l.name));
+            const created = new Date(issue.created_at).toISOString().replace('T',' ').slice(0,19);
+            const updated = new Date(issue.updated_at).toISOString().replace('T',' ').slice(0,19);
+
+            // 2) Componer Markdown
+            const md = [
+              `# ${issue.title} (#${issue.number})`,
+              '',
+              `**Estado:** ${issue.state.toUpperCase()}  `,
+              `**Autor:** @${issue.user.login}  `,
+              `**Creado:** ${created}  `,
+              `**Actualizado:** ${updated}  `,
+              `**Etiquetas:** ${labels.length ? labels.join(', ') : '—'}`,
+              '',
+              '---',
+              '',
+              issue.body || '_Sin descripción_',
+              ''
+            ];
+
+            if (comments.length) {
+              md.push('---', '## Comentarios');
+              for (const c of comments) {
+                const dt = new Date(c.created_at).toISOString().replace('T',' ').slice(0,19);
+                md.push('', `**@${c.user.login}** — ${dt}`, '', (c.body || '_Sin contenido_'), '', '---');
+              }
+            }
+
+            const markdown = md.join('\n');
+
+            // 3) Render a HTML vía API Markdown GitHub (GFM)
+            const { data: htmlBody } = await github.rest.markdown.render({
+              text: markdown,
+              mode: 'gfm',
+              context: `${owner}/${repo}`
+            });
+
+            // 4) Envolver en HTML con CSS simple
+            const css = `
+              body { font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 24px; color: #24292f; }
+              .meta { font-size: 12px; color: #57606a; }
+              h1, h2, h3 { color: #1f2328; }
+              pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+              blockquote { color:#57606a; border-left:4px solid #d0d7de; margin:0; padding:.5em 1em; }
+              table { border-collapse: collapse; }
+              th, td { border: 1px solid #d0d7de; padding: 6px 8px; }
+              hr { border: 0; border-top: 1px solid #d8dee4; margin: 24px 0; }
+              img { max-width: 100%; }
+              a { color: #0969da; text-decoration: none; }
+            `;
+
+            const html = `
+              <!doctype html>
+              <html>
+              <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <title>${issue.title} (#${issue.number})</title>
+                <style>${css}</style>
+              </head>
+              <body>
+                <div class="meta"><strong>Repositorio:</strong> ${owner}/${repo}</div>
+                <div class="meta"><strong>URL:</strong> <a href="${issue.html_url}">${issue.html_url}</a></div>
+     <hr/>
+                ${htmlBody}
+              </body>
+              </html>
+            `;
+
+            // 5) Guardar a disco
+            const fs = require('fs');
+            const path = require('path');
+            const outDir = path.join(process.cwd(), 'tmp-export');
+            fs.mkdirSync(outDir, { recursive: true });
+
+            const base = `issue-${issue.number}`;
+            const htmlPath = path.join(outDir, `${base}.html`);
+            const pdfPath  = path.join(outDir, `${base}.pdf`);
+
+            fs.writeFileSync(htmlPath, html, 'utf8');
+
+            core.setOutput('html', htmlPath);
+            core.setOutput('pdf', pdfPath);
+            core.setOutput('basename', base);
+
+      - name: Instalar wkhtmltopdf
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wkhtmltopdf
+
+      - name: Convertir HTML → PDF
+        run: |
+          wkhtmltopdf --enable-local-file-access --encoding 'utf-8' "${{ steps.build.outputs.html }}" "${{ steps.build.outputs.pdf }}"
+        shell: bash
+
+      - name: Subir PDF como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.basename }}
+          path: ${{ steps.build.outputs.pdf }}
+          if-no-files-found: error
+
+      - name: (Opcional) Commit del PDF en docs/exports/issues
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.commit_to_repo == true }}
+        run: |
+          mkdir -p docs/exports/issues
+          cp "${{ steps.build.outputs.pdf }}" "docs/exports/issues/${{ steps.build.outputs.basename }}.pdf"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/exports/issues/${{ steps.build.outputs.basename }}.pdf
+          git commit -m "docs: export Issue #${{ steps.resolve.outputs.num }} a PDF"
+          git push
