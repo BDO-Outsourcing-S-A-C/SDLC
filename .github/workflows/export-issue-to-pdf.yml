@@ -16,12 +16,12 @@ on:
     types: [labeled]
 
 permissions:
-  contents: write   # necesario si activas commit_to_repo
+  contents: write   # necesario si activas commit_to_repo (último paso)
   issues: read
 
 jobs:
   export:
-    # Ejecuta si lo llamas manualmente o si etiquetaste el issue con export:pdf
+    # Ejecuta si lo llamas manualmente o si etiquetas el issue con export:pdf
     if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'export:pdf')) }}
     runs-on: ubuntu-latest
 
@@ -113,8 +113,8 @@ jobs:
               </head>
               <body>
                 <div class="meta"><strong>Repositorio:</strong> ${owner}/${repo}</div>
-                <div class="meta"><strong>URL:</strong> <a href="${issue.html_url}">${issue.html_url}</a></div>
-     <hr/>
+                <div class="meta"><strong>URL:</strong> ${issue.html_url}${issue.html_url}</a></div>
+                <hr/>
                 ${htmlBody}
               </body>
               </html>
