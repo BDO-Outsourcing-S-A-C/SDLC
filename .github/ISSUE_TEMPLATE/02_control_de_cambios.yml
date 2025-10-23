@@ -5,6 +5,13 @@ labels: ["enhancement"]
 type: "Feature"
 body:
 
+  - type: dropdown
+    id: sistema
+    attributes:
+      label: Sistema
+      options: ["SMARTSYS","MyReporting","MDW","Otro"]
+    validations: { required: true }
+
   - type: input
     id: modulo
     attributes:
