@@ -20,6 +20,13 @@ body:
       options: ["Funcional","Seguridad","Regional/Legal","Deuda tecnica"]
     validations: { required: true }
 
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: Prioridad
+      options: ["Urgente", "Alta","Media","Baja"]
+    validations: { required: true }    
+
   - type: input
     id: ticket
     attributes:
@@ -109,11 +116,11 @@ body:
         - label: Descripción completa del requerimiento.
         - label: Criterios de aceptación definidos.
         - label: Dependencias identificadas y resueltas.
-        - label: Impacto analizado** (funcional, técnico, seguridad).
-        - label: Mockups / diagramas disponibles** (si aplica).
-        - label: Estimación de esfuerzo** acordada por el equipo.
-        - label: Prioridad asignada** (P1, P2, P3).
-        - label: Aprobación del Product Owner** registrada.
+        - label: Impacto analizado (funcional, técnico, seguridad).
+        - label: Mockups / diagramas disponibles (si aplica).
+        - label: Estimación de esfuerzo acordada por el equipo.
+        - label: Prioridad asignada (Urgente, Alta, Media, Baja).
+        - label: Aprobación del Product Owner registrada.
         
     - type: checkboxes
     id: dod
@@ -130,3 +137,16 @@ body:
         - label: Checklist de seguridad completado.
         - label: Aprobación final del Product Owner registrada.
         - label: Historial de cambios actualizado en control de versiones.
+        
+    - type: textarea
+      id: firmas
+      attributes:
+        label: Firmantes
+        description: "Product Owner, Sponsor, Project Manager y Lider Tecnico"
+        value: |
+          | Header | Header |
+          |--------|--------|
+          |  |  |
+          | Produc Owner | Sponsor |
+          |  |  |
+          | Lider Tecnico | Project Manager | 
