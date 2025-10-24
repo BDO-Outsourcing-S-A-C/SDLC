@@ -3,24 +3,31 @@ description: "STI-ST-916 • Solicitar y gestionar un cambio"
 title: "CC: {sistema}/{modulo} - {titulo corto}"
 labels: ["enhancement"]
 type: "Feature"
+projects: "github/6"
 body:
 
   - type: dropdown
     id: sistema
     attributes:
       label: Sistema
-      options: ["SMARTSYS","MyReporting","MDW","Otro"]
+      options: ["Smartsys","MyReporting","Novedades Online","AGLA","BDOapps","Anysign","Linea Etica","Validacion de compras","MyDocsWeb"]
+    validations: { required: true }
+    
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de cambio
+      options: ["Funcional","Seguridad","Regional/Legal","Deuda tecnica"]
     validations: { required: true }
 
   - type: input
-    id: modulo
+    id: ticket
     attributes:
-      label: Módulo
-      placeholder: "p. ej., MDW / Panel CTC / Login"
+      label: ID Ticket
+      placeholder: "#12345"
     validations:
       required: true
 
-  # ← Campo con texto predeterminado
   - type: textarea
     id: descripcion
     attributes:
@@ -31,14 +38,11 @@ body:
         **Contexto**: _Describe el problema/solicitud y el impacto actual._
         **Objetivo del cambio**: _Qué se busca lograr y por qué._
         **Alcance**:
-        - Sistemas/Módulos involucrados:
-        - Ambientes: Desarrollo / QA / Producción
+        - Sistemas/Módulos involucrados: (Usuarios/Empresas/Reportes)
         - Fuera de alcance:
         **Suposiciones**:
         - ...
-        **Criterios de éxito**:
-        - ...
-        **Métricas** (si aplica):
+        **Criterios de aceptacion**:
         - ...
     validations:
       required: true
@@ -50,7 +54,6 @@ body:
       description: "Elementos afectados, compatibilidad, seguridad y riesgos."
       value: |
         **Elementos afectados**: tablas, endpoints, jobs, UI, permisos.
-        **Compatibilidad**: ¿rompe API? ¿requiere migraciones?
         **Seguridad**: headers, TLS, XSS, dependencias.
         **Riesgos**: ...
         **Mitigaciones**: ...
@@ -60,24 +63,13 @@ body:
     attributes:
       label: Plan de trabajo
       value: |
-        **Desarrollo**:
-        - Tareas:
-        - Responsable:
-        **QA**:
-        - Casos/pruebas:
-        - Responsable:
-        **Producción**:
-        - Ventana/pase:
-        - Rollback:
-        **Comunicaciones**:
-        - Stakeholders:
-        - Aprobaciones:
+        ## Carga el Gantt de proyecto
 
   - type: input
     id: autorizado_por
     attributes:
       label: Autorizado por
-      placeholder: "Nombre Apellido (Cargo)"
+      value: "PO del sistema/modulo"
 
   - type: input
     id: esfuerzo
@@ -90,12 +82,6 @@ body:
     attributes:
       label: Costo asociado (S/ o USD)
       placeholder: "Ej.: S/ 1,593.17"
-
-  - type: input
-    id: intellisign
-    attributes:
-      label: Aprobación (Intellisign URL/ID)
-      placeholder: "https://cloud.intellisign.net/#/public/copia-autentica ..."
 
   - type: textarea
     id: evidencias
