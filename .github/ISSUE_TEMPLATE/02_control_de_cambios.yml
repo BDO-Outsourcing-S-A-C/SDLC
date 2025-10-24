@@ -39,7 +39,7 @@ body:
     id: descripcion
     attributes:
       label: Descripción general del cambio
-      description: "Resume el objetivo del cambio y el problema que soluciona."
+      description: "Resume el objetivo del cambio y el problema que soluciona. Adjunta analisis de beneficio de ser el caso."
       value: |
         ## Plantilla sugerida (edita libremente)
         **Contexto**: _Describe el problema/solicitud y el impacto actual._
@@ -68,14 +68,14 @@ body:
   - type: textarea
     id: plan
     attributes:
-      label: Plan de trabajo y DoR/DoD
+      label: Plan de trabajo
       description: "Adjunta el Gantt del proyecto"
 
   - type: input
     id: autorizado_por
     attributes:
       label: Autorizado por
-      value: "PO del sistema/modulo"
+      placeholder: "PO del sistema/modulo"
 
   - type: input
     id: esfuerzo
@@ -140,9 +140,7 @@ body:
       label: Firmantes
       description: "Product Owner, Sponsor, Project Manager y Lider Tecnico"
       value: |
-        | Header | Header |
-        |--------|--------|
-        | <br><br><br><br><br> | <br><br><br><br><br> |
+        | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
         | Product Owner <br> Nombre <br> Cargo | Sponsor <br> Nombre <br> Cargo |
-        | <br><br><br><br><br> | <br><br><br><br><br> |
+        | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
         | Lider Tecnico <br> Nombre <br> Cargo | Project Manager <br> Nombre <br> Cargo | 
