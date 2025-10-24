@@ -117,7 +117,6 @@ body:
         - label: Criterios de aceptación definidos.
         - label: Dependencias identificadas y resueltas.
         - label: Impacto analizado (funcional, técnico, seguridad).
-        - label: Mockups / diagramas disponibles (si aplica).
         - label: Estimación de esfuerzo acordada por el equipo.
         - label: Prioridad asignada (Urgente, Alta, Media, Baja).
         - label: Aprobación del Product Owner registrada.
@@ -132,11 +131,8 @@ body:
         - label: Pruebas funcionales completadas (QA OK).
         - label: Documentación actualizada (README, manuales, diagramas).
         - label: Cumple criterios de aceptación sin desviaciones.
-        - label: Integración continua sin errores (pipeline verde).
         - label: Despliegue en ambiente QA validado.
-        - label: Checklist de seguridad completado.
         - label: Aprobación final del Product Owner registrada.
-        - label: Historial de cambios actualizado en control de versiones.
       
   - type: textarea
     id: firmas
