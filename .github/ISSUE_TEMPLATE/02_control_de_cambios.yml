@@ -105,12 +105,12 @@ body:
     attributes:
       label: Definition of Ready
       options:        
-        - label: **Título claro y conciso** que describe el objetivo.
-        - label: **Descripción completa** del requerimiento.
-        - label: **Criterios de aceptación definidos** (formato Gherkin o similar).
-        - label: **Dependencias identificadas** y resueltas.
-        - label: **Impacto analizado** (funcional, técnico, seguridad).
-        - label: **Mockups / diagramas disponibles** (si aplica).
-        - label: **Estimación de esfuerzo** acordada por el equipo.
-        - label: **Prioridad asignada** (P1, P2, P3).
-        - label: **Aprobación del Product Owner** registrada.
+        - label: Título claro y conciso** que describe el objetivo.
+        - label: Descripción completa** del requerimiento.
+        - label: Criterios de aceptación definidos** (formato Gherkin o similar).
+        - label: Dependencias identificadas** y resueltas.
+        - label: Impacto analizado** (funcional, técnico, seguridad).
+        - label: Mockups / diagramas disponibles** (si aplica).
+        - label: Estimación de esfuerzo** acordada por el equipo.
+        - label: Prioridad asignada** (P1, P2, P3).
+        - label: Aprobación del Product Owner** registrada.
