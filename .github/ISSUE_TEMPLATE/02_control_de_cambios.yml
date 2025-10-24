@@ -146,7 +146,7 @@ body:
       value: |
         | Header | Header |
         |--------|--------|
-        |  |  |
-        | Produc Owner | Sponsor |
-        |  |  |
-        | Lider Tecnico | Project Manager | 
+        | <br><br><br><br><br> | <br><br><br><br><br> |
+        | Product Owner <br> Nombre <br> Cargo | Sponsor <br> Nombre <br> Cargo |
+        | <br><br><br><br><br> | <br><br><br><br><br> |
+        | Lider Tecnico <br> Nombre <br> Cargo | Project Manager <br> Nombre <br> Cargo | 
