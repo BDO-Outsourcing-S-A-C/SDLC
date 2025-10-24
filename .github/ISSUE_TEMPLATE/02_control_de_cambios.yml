@@ -140,6 +140,7 @@ body:
       label: Firmantes
       description: "Product Owner, Sponsor, Project Manager y Lider Tecnico"
       value: |
+        |Firma|Firma|
         | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
         | Product Owner <br> Nombre <br> Cargo | Sponsor <br> Nombre <br> Cargo |
         | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
