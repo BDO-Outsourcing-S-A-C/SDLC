@@ -61,9 +61,8 @@ body:
   - type: textarea
     id: plan
     attributes:
-      label: Plan de trabajo
-      value: |
-        ## Carga el Gantt de proyecto
+      label: Plan de trabajo y DoR/DoD
+      description: "Adjunta el Gantt del proyecto"
 
   - type: input
     id: autorizado_por
@@ -84,22 +83,34 @@ body:
       placeholder: "Ej.: S/ 1,593.17"
 
   - type: textarea
-    id: evidencias
+    id: arquitectura
     attributes:
-      label: Evidencias
-      description: "Adjunta enlaces a capturas, logs, PRs o pruebas."
-      value: |
-        - Capturas:
-        - Logs:
-        - PRs relacionados:
-        - Actas de pruebas:
+      label: Documento de arquitectura o ADRs
+      description: "Adjunta documentos elaborados"
+
+  - type: textarea
+    id: bd
+    attributes:
+      label: Documento de base de datos
+      description: "Adjunta documentos elaborados"
+
+  - type: textarea
+    id: riesgos
+    attributes:
+      label: Documento de analisis de riesgos
+      description: "Adjunta documentos elaborados"
 
   - type: checkboxes
-    id: checklist
+    id: dor
     attributes:
-      label: Checklist de calidad
-      options:
-        - label: "Impacto de seguridad revisado"
-        - label: "Casos de prueba definidos"
-        - label: "Plan de rollback definido"
-        - label: "Aprobación del responsable registrada"
+      label: Definition of Ready
+      options:        
+        - label: **Título claro y conciso** que describe el objetivo.
+        - label: **Descripción completa** del requerimiento.
+        - label: **Criterios de aceptación definidos** (formato Gherkin o similar).
+        - label: **Dependencias identificadas** y resueltas.
+        - label: **Impacto analizado** (funcional, técnico, seguridad).
+        - label: **Mockups / diagramas disponibles** (si aplica).
+        - label: **Estimación de esfuerzo** acordada por el equipo.
+        - label: **Prioridad asignada** (P1, P2, P3).
+        - label: **Aprobación del Product Owner** registrada.
