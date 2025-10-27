@@ -1,5 +1,5 @@
-name: "Control de Cambios"
-description: "STI-ST-916 • Solicitar y gestionar un cambio"
+name: "STI-ST-916 Control de Cambios"
+description: "Crea una solicitud de cambio para mejorar/agregar una funcionalidad"
 title: "CC: {sistema}/{modulo} - {titulo corto}"
 labels: ["enhancement"]
 type: "Feature"
