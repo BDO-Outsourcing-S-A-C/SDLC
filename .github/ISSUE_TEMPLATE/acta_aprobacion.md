@@ -1,3 +1,13 @@
+---
+name: STI-ST-917 Acta de aceptacion para pase a produccion
+about: Crea un acta de aceptacion para realizar el pase a produccion de un sistema/modulo
+title: 'Acta de Aceptacion-{sistema} {modulo}'
+labels: 'documentation'
+assignees: ''
+type: "Task"
+
+---
+
 # 📄 Acta de Aprobación de Release para Pase a Producción
 
 ## 🆔 Identificación del Release
