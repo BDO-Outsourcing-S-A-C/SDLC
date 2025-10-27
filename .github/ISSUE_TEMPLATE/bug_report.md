@@ -1,9 +1,10 @@
 ---
-name: Reporte de Bug
+name: STI-ST-931 Reporte de Bug
 about: Crea un reporte de bug/error para mejorar el sistema
-title: 'Prueba'
+title: 'Bug-{sistema} {modulo}'
 labels: 'bug'
 assignees: ''
+type: "Bug"
 
 ---
 
