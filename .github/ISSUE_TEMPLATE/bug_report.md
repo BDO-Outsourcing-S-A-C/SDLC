@@ -1,38 +1,27 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+name: Reporte de Bug
+about: Crea un reporte de bug/error para mejorar el sistema
+title: 'Prueba'
+labels: 'bug'
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Descripcion del Bug/Error**
+Una descripcion concisa del error encontrado.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Pasos para reproducir**
+1. Abrir/Ir a '...'
+2. Click en '....'
+3. Ubicar '....'
+4. Ejecutar '....'
+5. Visualiza error en '....'
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Comportamiento esperado**
+Una descripcion concisa y clara de lo que se espera que el sistema haga.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+Si aplica, agrega capturas de pantalla para ayudar a explicar el problema/error.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+**Contexto adicional**
+Agrega cualquier contexto adicional acerca del problema aqui.
