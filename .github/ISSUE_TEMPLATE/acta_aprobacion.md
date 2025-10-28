@@ -5,7 +5,7 @@ title: 'Acta de Aceptacion-{sistema} {modulo}'
 labels: 'documentation'
 assignees: ''
 type: "Task"
-projects: ["https://github.com/orgs/BDO-Outsourcing-S-A-C/projects/6"]
+project: ["https://github.com/orgs/BDO-Outsourcing-S-A-C/projects/6"]
 
 ---
 
