@@ -16,5 +16,5 @@ jobs:
           # to the issue
           project-url: https://github.com/orgs/BDO-Outsourcing-S-A-C/projects/6
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
-          #labeled: bug, needs-triage
-          #label-operator: OR
+          labeled: enhancement, bug
+          label-operator: OR
