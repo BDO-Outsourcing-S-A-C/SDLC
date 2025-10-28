@@ -1,0 +1,56 @@
+name: Agregar issue al Proyecto Clásico #6
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Llamar a la API para agregar el issue al proyecto clásico
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const projectNumber = 6; // ID del proyecto clásico
+            const org = "BDO-Outsourcing-S-A-C";
+            const issueNumber = context.issue.number;
+            const repo = context.repo.repo;
+            const owner = context.repo.owner;
+
+            // 1. Obtener el ID del proyecto clásico
+            const projects = await github.rest.projects.listForOrg({
+              org: org
+            });
+
+            const project = projects.data.find(p => p.number === projectNumber);
+            if (!project) {
+              core.setFailed(`Proyecto #${projectNumber} no encontrado en la organización ${org}`);
+              return;
+            }
+
+            const projectId = project.id;
+
+            // 2. Obtener la columna donde se agregará el issue (por ejemplo, "To Do")
+            const columns = await github.rest.projects.listColumns({
+              project_id: projectId
+            });
+
+            const column = columns.data.find(c => c.name === "To Do");
+            if (!column) {
+              core.setFailed(`Columna 'To Do' no encontrada en el proyecto`);
+              return;
+            }
+
+            const columnId = column.id;
+
+            // 3. Crear la tarjeta en la columna para el issue
+            await github.rest.projects.createCard({
+              column_id: columnId,
+              content_id: context.payload.issue.id,
+              content_type: "Issue"
+            });
+
+            console.log(`Issue #${issueNumber} agregado al proyecto clásico #${projectNumber} en la columna 'To Do'`);
+``
