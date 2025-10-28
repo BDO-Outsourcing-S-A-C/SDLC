@@ -4,7 +4,7 @@ title: "Acta de Aceptación-{sistema} {modulo}"
 labels: ["documentation"]
 assignees: []
 type: "Task"
-projects: "BDO-Outsourcing-S-A-C/6"
+projects: ["BDO-Outsourcing-S-A-C/7"]
 
 body:
   - type: markdown
