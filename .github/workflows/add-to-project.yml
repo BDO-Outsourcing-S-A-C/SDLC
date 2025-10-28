@@ -1,4 +1,4 @@
-name: Agregar issue al Proyecto Clásico #6
+name: Add to default project #6
 
 on:
   issues:
@@ -53,4 +53,3 @@ jobs:
             });
 
             console.log(`Issue #${issueNumber} agregado al proyecto clásico #${projectNumber} en la columna 'To Do'`);
-``
