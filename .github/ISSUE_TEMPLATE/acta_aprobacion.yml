@@ -4,26 +4,21 @@ title: "Acta de Aceptación-{sistema} {modulo}"
 labels: ["documentation"]
 assignees: []
 type: "Task"
-projects: ["BDO-Outsourcing-S-A-C/7"]
 
 body:
-  - type: markdown
-    attributes:
-      value: |
-        # 📄 Acta de Aprobación de Release para Pase a Producción
 
   - type: input
-    id: release_name
+    id: sistema
     attributes:
-      label: "🆔 Nombre del Release"
-      placeholder: "vX.Y.Z"
+      label: "Nombre del Sistema"
+      placeholder: "Smartsys, Novedades, MyReporting ..."
     validations:
       required: true
 
   - type: input
     id: fecha_aprobacion
     attributes:
-      label: "📅 Fecha de Aprobación"
+      label: "Fecha de Aprobación"
       placeholder: "DD/MM/AAAA"
     validations:
       required: true
@@ -36,28 +31,10 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: repositorio
-    attributes:
-      label: "Repositorio"
-      placeholder: "URL del repositorio en GitHub"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: branch
-    attributes:
-      label: "Branch"
-      options:
-        - main
-        - release
-    validations:
-      required: true
-
   - type: textarea
     id: objetivo
     attributes:
-      label: "✅ Objetivo"
+      label: "Objetivo"
       description: "Describe el propósito del release y los cambios que se incorporarán en el pase a producción."
       placeholder: "Ejemplo: Este release incluye correcciones críticas de seguridad y nuevas funcionalidades para el módulo de autenticación."
     validations:
@@ -66,36 +43,28 @@ body:
   - type: checkboxes
     id: componentes
     attributes:
-      label: "📦 Componentes afectados"
+      label: "Componentes afectados"
       options:
         - label: Backend
         - label: Frontend
         - label: Base de datos
         - label: Infraestructura
 
-  - type: textarea
-    id: tickets
-    attributes:
-      label: "Tickets/Jiras asociados"
-      placeholder: "#1234 - Ajuste en validación de usuarios"
-    validations:
-      required: false
-
   - type: checkboxes
     id: validaciones
     attributes:
-      label: "🔍 Validaciones Previas"
+      label: "Validaciones Previas"
       options:
         - label: Pruebas unitarias completadas
         - label: Pruebas de integración completadas
-        - label: Pruebas de regresión completadas
+        - label: Pruebas de usuario completadas
         - label: Aprobación QA
         - label: Documentación actualizada
 
   - type: textarea
     id: riesgos
     attributes:
-      label: "⚠️ Riesgos Identificados"
+      label: "Riesgos Identificados"
       placeholder: "Ejemplo: Posible impacto en el rendimiento del login por cambios en la lógica de autenticación."
     validations:
       required: false
@@ -103,39 +72,18 @@ body:
   - type: input
     id: fecha_pase
     attributes:
-      label: "📅 Fecha del Pase a Producción"
+      label: "Fecha del Pase a Producción"
       placeholder: "DD/MM/AAAA"
     validations:
       required: true
 
-  - type: input
-    id: hora_pase
-    attributes:
-      label: "Hora del Pase a Producción"
-      placeholder: "HH:MM (Zona horaria)"
-    validations:
-      required: true
-
-  - type: textarea
-    id: participantes
-    attributes:
-      label: "👥 Participantes y Responsables"
-      placeholder: |
-        | Rol                | Nombre                  | Firma |
-        |--------------------|-------------------------|-------|
-        | Líder de Proyecto  |                         |       |
-        | QA                 |                         |       |
-        | DevOps             |                         |       |
-        | Product Owner      |                         |       |
-
   - type: checkboxes
     id: aprobacion
     attributes:
-      label: "✅ Aprobación"
+      label: "Aprobación"
       options:
         - label: Líder de Proyecto
         - label: QA
-        - label: DevOps
         - label: Product Owner
 
   - type: textarea
@@ -143,3 +91,15 @@ body:
     attributes:
       label: "📚 Notas Adicionales"
       placeholder: "Ejemplo: Se recomienda monitoreo intensivo durante las primeras 24 horas posteriores al despliegue."
+
+  - type: textarea
+    id: participantes
+    attributes:
+      label: "Participantes y Responsables"
+      value: |
+        | Rol                | Nombre                  | Firma |
+        |--------------------|-------------------------|-------|
+        | Líder de Proyecto  |                         |       |
+        | QA                 |                         |       |
+        | DevOps             |                         |       |
+        | Product Owner      |                         |       |
