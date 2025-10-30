@@ -73,4 +73,3 @@ Describe el propósito del sprint y los entregables comprometidos.
 ---
 
 **Última actualización:** DD/MM/AAAA
-``
