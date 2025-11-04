@@ -1,4 +1,4 @@
-name: Export Issue to PDF
+name: Exportar Issue a PDF
 
 on:
   workflow_dispatch:

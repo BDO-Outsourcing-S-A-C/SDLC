@@ -1,4 +1,4 @@
-name: Add issues to default project
+name: Agregar Issue a Proyecto de GitHub
 
 on:
   issues:

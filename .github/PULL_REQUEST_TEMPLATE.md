@@ -23,7 +23,7 @@ Describe el propósito del sprint y los entregables comprometidos.
   - `#US-456` - Optimización de reportes  
 
 - **Historias no completadas:**  
-  - `#US-789` - Integración con API externa  
+  - `#US-789` - Integración con API externa 
 
 ---
 
