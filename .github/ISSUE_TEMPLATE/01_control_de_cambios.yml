@@ -5,27 +5,37 @@ labels: ["enhancement"]
 type: "Feature"
 projects: "github/6"
 body:
-
   - type: dropdown
     id: sistema
     attributes:
       label: Sistema
-      options: ["Smartsys","MyReporting","Novedades Online","AGLA","BDOapps","Anysign","Linea Etica","Validacion de compras","MyDocsWeb"]
+      options:
+        [
+          "Smartsys",
+          "MyReporting",
+          "Novedades Online",
+          "AGLA",
+          "BDOapps",
+          "Anysign",
+          "Linea Etica",
+          "Validacion de compras",
+          "MyDocsWeb",
+        ]
     validations: { required: true }
-    
+
   - type: dropdown
     id: tipo
     attributes:
       label: Tipo de cambio
-      options: ["Funcional","Seguridad","Regional/Legal","Deuda tecnica"]
+      options: ["Funcional", "Seguridad", "Regional/Legal", "Deuda tecnica"]
     validations: { required: true }
 
   - type: dropdown
     id: prioridad
     attributes:
       label: Prioridad
-      options: ["Urgente", "Alta","Media","Baja"]
-    validations: { required: true }    
+      options: ["Urgente", "Alta", "Media", "Baja"]
+    validations: { required: true }
 
   - type: input
     id: ticket
@@ -41,7 +51,6 @@ body:
       label: Descripción general del cambio
       description: "Resume el objetivo del cambio y el problema que soluciona. Adjunta analisis de beneficio de ser el caso."
       value: |
-        ## Plantilla sugerida (edita libremente)
         **Contexto**: _Describe el problema/solicitud y el impacto actual._
         **Objetivo del cambio**: _Qué se busca lograr y por qué._
         **Alcance**:
@@ -69,7 +78,7 @@ body:
     id: plan
     attributes:
       label: Plan de trabajo
-      description: "Adjunta el Gantt del proyecto"
+      description: "Adjunta el Gantt del proyecto o pega aqui la escala de tiempo estimada."
 
   - type: input
     id: autorizado_por
@@ -111,7 +120,7 @@ body:
     id: dor
     attributes:
       label: Definition of Ready
-      options:        
+      options:
         - label: Título claro y conciso que describe el objetivo.
         - label: Descripción completa del requerimiento.
         - label: Criterios de aceptación definidos.
@@ -120,12 +129,12 @@ body:
         - label: Estimación de esfuerzo acordada por el equipo.
         - label: Prioridad asignada (Urgente, Alta, Media, Baja).
         - label: Aprobación del Product Owner registrada.
-  
+
   - type: checkboxes
     id: dod
     attributes:
       label: Definition of Done
-      options:        
+      options:
         - label: Código desarrollado y revisado (Code Review aprobado).
         - label: Pruebas unitarias ejecutadas y exitosas.
         - label: Pruebas funcionales completadas (QA OK).
@@ -133,7 +142,7 @@ body:
         - label: Cumple criterios de aceptación sin desviaciones.
         - label: Despliegue en ambiente QA validado.
         - label: Aprobación final del Product Owner registrada.
-      
+
   - type: textarea
     id: firmas
     attributes:
@@ -145,4 +154,4 @@ body:
         | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
         | Product Owner <br> Nombre <br> Cargo | Sponsor <br> Nombre <br> Cargo |
         | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
-        | Lider Tecnico <br> Nombre <br> Cargo | Project Manager <br> Nombre <br> Cargo | 
+        | Lider Tecnico <br> Nombre <br> Cargo | Project Manager <br> Nombre <br> Cargo |

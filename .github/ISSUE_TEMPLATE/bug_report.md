@@ -3,7 +3,6 @@ name: STI-ST-931 Reporte de Bug
 about: Crea un reporte de bug/error para corregir el funcionamiento del sistema
 title: 'Bug-{sistema} {modulo}'
 labels: 'bug'
-assignees: ''
 type: "Bug"
 
 ---
@@ -12,6 +11,7 @@ type: "Bug"
 Una descripcion concisa del error encontrado.
 
 **Pasos para reproducir**
+
 1. Abrir/Ir a '...'
 2. Click en '....'
 3. Ubicar '....'
