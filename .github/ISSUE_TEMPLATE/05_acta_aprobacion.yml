@@ -16,6 +16,12 @@ body:
       required: true
 
   - type: input
+    id: version
+    attributes:
+      label: "Versión / Release"
+      placeholder: "Ejemplo: v1.2.3"
+
+  - type: input
     id: fecha_aprobacion
     attributes:
       label: "Fecha de Aprobación"

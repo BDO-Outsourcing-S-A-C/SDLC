@@ -1,0 +1,78 @@
+name: STI-ST-921 ADR - Registro de Decisión Arquitectónica
+description: Documenta una decisión arquitectónica importante para el sistema
+title: "ADR: {sistema} - {título-de-la-decisión}"
+labels: ["documentation"]
+assignees: []
+type: "Task"
+
+body:
+
+  - type: input
+    id: contexto
+    attributes:
+      label: "Contexto"
+      description: "Describe el contexto que llevó a esta decisión (problema, restricciones, objetivos)."
+      placeholder: "Ejemplo: Necesitamos definir el mecanismo de autenticación para usuarios externos."
+    validations:
+      required: true
+
+  - type: textarea
+    id: decision
+    attributes:
+      label: "Decisión"
+      description: "Describe la decisión tomada y por qué se eligió esta opción."
+      placeholder: "Ejemplo: Usaremos OAuth 2.0 con OpenID Connect para autenticación."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: "Alternativas consideradas"
+      description: "Lista las opciones evaluadas y por qué fueron descartadas."
+      placeholder: |
+        - LDAP: descartado por falta de soporte en aplicaciones móviles.
+        - SAML: descartado por complejidad en integración.
+    validations:
+      required: false
+
+  - type: textarea
+    id: consecuencias
+    attributes:
+      label: "Consecuencias"
+      description: "Impactos positivos y negativos de esta decisión."
+      placeholder: |
+        Positivos:
+        - Estándar ampliamente soportado.
+        Negativos:
+        - Mayor complejidad en configuración inicial.
+    validations:
+      required: true
+
+  - type: input
+    id: fecha
+    attributes:
+      label: "Fecha de la decisión"
+      placeholder: "DD/MM/AAAA"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: responsables
+    attributes:
+      label: "Responsables de la decisión"
+      options:
+        - label: Jefe de ST
+        - label: Arquitecto
+        - label: Lider Técnico
+        - label: Oficial de Seguridad
+        - label: DBA
+
+  - type: textarea
+    id: referencias
+    attributes:
+      label: "Referencias"
+      description: "Enlaces o documentos relacionados con esta decisión."
+      placeholder: "Ejemplo: RFC 6749 (OAuth 2.0), documentación interna."
+    validations:
+      required: false

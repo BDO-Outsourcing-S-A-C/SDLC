@@ -1,0 +1,79 @@
+name: STI-ST-921 Historia de Usuario
+description: Crea una historia de usuario para el backlog del proyecto
+title: "HU: {nombre-corto-de-la-historia}"
+labels: ["user story"]
+assignees: []
+type: "Task"
+
+body:
+
+  - type: input
+    id: como
+    attributes:
+      label: "Como"
+      description: "¿Quién es el actor o rol que necesita esta funcionalidad?"
+      placeholder: "Ejemplo: Como usuario registrado"
+    validations:
+      required: true
+
+  - type: input
+    id: quiero
+    attributes:
+      label: "Quiero"
+      description: "¿Qué acción o funcionalidad desea realizar?"
+      placeholder: "Ejemplo: Quiero recuperar mi contraseña"
+    validations:
+      required: true
+
+  - type: input
+    id: para
+    attributes:
+      label: "Para"
+      description: "¿Cuál es el beneficio o valor que obtiene?"
+      placeholder: "Ejemplo: Para acceder nuevamente a mi cuenta"
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterios
+    attributes:
+      label: "Criterios de Aceptación"
+      description: "Define las condiciones que deben cumplirse para considerar la historia como terminada."
+      placeholder: |
+        - El usuario puede solicitar el restablecimiento de contraseña.
+        - Se envía un correo con el enlace de recuperación.
+    validations:
+      required: true
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "Notas Técnicas"
+      description: "Información adicional, restricciones o consideraciones técnicas."
+      placeholder: "Ejemplo: Validar que el token de recuperación expire en 15 minutos."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad"
+      options: ["Alta","Media","Baja"]
+    validations: { required: true }
+
+  - type: input
+    id: estimacion
+    attributes:
+      label: "Estimación"
+      description: "Tiempo estimado o puntos de historia."
+      placeholder: "Ejemplo: 5 puntos"
+    validations:
+      required: false
+
+  - type: textarea
+    id: dependencias
+    attributes:
+      label: "Dependencias"
+      description: "Historias, tareas o módulos relacionados."
+      placeholder: "Ejemplo: Depende de HU-002 (Registro de usuario)."
+    validations:

@@ -1,15 +1,17 @@
 # 📄 Acta de Cierre de Sprint
 
-## 🆔 Identificación del Sprint
+## Identificación del Sprint
+
 - **Nombre del Sprint:** `Sprint XX`
 - **Fecha de Cierre:** DD/MM/AAAA
-- **Responsable del Sprint:** [Nombre y Cargo]
-- **Repositorio:** [URL del repositorio en GitHub]
-- **Branch principal:** `develop` / `main`
+- **Lider Tecnico:** [Nombre y Cargo]
+- **Repositorio:** [Nombre del GitHub]
+- **Versión / Release:** vX.Y.Z
 
 ---
 
-## ✅ Objetivo del Sprint
+## Objetivo del Sprint
+
 Describe el propósito del sprint y los entregables comprometidos.
 
 **Descripción breve:**
@@ -17,7 +19,8 @@ Describe el propósito del sprint y los entregables comprometidos.
 
 ---
 
-## 📦 Alcance del Sprint
+## Alcance del Sprint
+
 - **Historias de usuario completadas:**  
   - `#US-123` - Implementación de login seguro  
   - `#US-456` - Optimización de reportes  
@@ -27,7 +30,8 @@ Describe el propósito del sprint y los entregables comprometidos.
 
 ---
 
-## 🔍 Validaciones Realizadas
+## Validaciones Realizadas
+
 - [ ] Pruebas unitarias completadas  
 - [ ] Pruebas de integración completadas  
 - [ ] Pruebas de aceptación completadas  
@@ -36,40 +40,39 @@ Describe el propósito del sprint y los entregables comprometidos.
 
 ---
 
-## 📊 Métricas del Sprint
-- **Velocidad del equipo:** XX puntos
+## Métricas del Sprint
+
 - **Historias completadas:** XX / XX
 - **Defectos encontrados:** XX
 
 ---
 
-## ⚠️ Riesgos y Lecciones Aprendidas
+## Riesgos y Lecciones Aprendidas
+>
 > Ejemplo: Se identificó que la estimación de la historia #US-789 fue insuficiente por falta de información técnica.
 
 ---
 
-## 👥 Participantes y Responsables
-| Rol                | Nombre                  | Firma |
-|--------------------|-------------------------|-------|
-| Scrum Master       |                         |       |
-| Product Owner      |                         |       |
-| Equipo de Desarrollo |                      |       |
-
----
-
-## ✅ Aprobación del Cierre
-> Con la firma de los responsables, se confirma el cierre del sprint y la aceptación de los entregables.
-
-**Firmas Digitales:**  
-- [ ] Scrum Master  
-- [ ] Product Owner  
-- [ ] Equipo de Desarrollo  
-
----
-
-## 📚 Notas Adicionales
+## Notas Adicionales
+>
 > Ejemplo: Se recomienda revisar la planificación del próximo sprint para ajustar estimaciones.
 
 ---
 
-**Última actualización:** DD/MM/AAAA
+## Participantes y Responsables
+
+| Rol                  | Nombre                  | Firma |
+|----------------------|-------------------------|-------|
+| Project Manager      | Milagros Campos         |   SI  |
+| Lider Tecnico        |                         |   SI  |
+| Equipo de Desarrollo |                         |   SI  |
+| Product Owner        |                         |   SI  |
+| Arquitecto           | Alberto Muñoz           |   SI  |
+
+---
+
+## ✅ Aprobación del Cierre
+>
+> Con la firma de los responsables, se confirma el cierre del sprint y la aceptación de los entregables.
+
+---
