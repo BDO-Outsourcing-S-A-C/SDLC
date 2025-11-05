@@ -6,7 +6,6 @@ assignees: []
 type: "Task"
 
 body:
-
   - type: input
     id: release_name
     attributes:
@@ -96,7 +95,7 @@ body:
   - type: checkboxes
     id: aprobacion
     attributes:
-      label: "✅ Aprobación"
+      label: "Aprobación"
       options:
         - label: Líder de Proyecto
         - label: QA
@@ -106,5 +105,5 @@ body:
   - type: textarea
     id: notas
     attributes:
-      label: "📚 Notas Adicionales"
+      label: "Notas Adicionales"
       placeholder: "Ejemplo: Monitoreo intensivo durante las primeras 24 horas."
