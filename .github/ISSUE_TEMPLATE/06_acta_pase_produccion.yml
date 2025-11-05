@@ -15,7 +15,7 @@ body:
       required: true
 
   - type: input
-    id: fecha_aprobacion
+    id: fecha
     attributes:
       label: "Fecha y hora de publicación"
       placeholder: "DD/MM/AAAA HH:MM"
@@ -82,9 +82,9 @@ body:
       required: false
 
   - type: textarea
-    id: participantes
+    id: firmantes
     attributes:
-      label: "Participantes y Responsables"
+      label: "Firmantes"
       placeholder: |
         | Rol                  | Nombre                  | Firma |
         |----------------------|-------------------------|-------|
