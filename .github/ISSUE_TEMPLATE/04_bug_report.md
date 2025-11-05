@@ -1,5 +1,5 @@
 ---
-name: STI-ST-931 Reporte de Bug
+name: STI-ST-918 Reporte de Bug
 about: Crea un reporte de bug/error para corregir el funcionamiento del sistema
 title: 'Bug-{sistema} {modulo}'
 labels: 'bug'

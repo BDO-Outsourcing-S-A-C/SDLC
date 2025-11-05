@@ -95,7 +95,7 @@ body:
   - type: textarea
     id: notas
     attributes:
-      label: "📚 Notas Adicionales"
+      label: "Notas Adicionales"
       placeholder: "Ejemplo: Se recomienda monitoreo intensivo durante las primeras 24 horas posteriores al despliegue."
 
   - type: textarea
@@ -103,9 +103,9 @@ body:
     attributes:
       label: "Participantes y Responsables"
       value: |
-        | Rol                | Nombre                  | Firma |
-        |--------------------|-------------------------|-------|
-        | Líder de Proyecto  |                         |       |
-        | QA                 |                         |       |
-        | DevOps             |                         |       |
-        | Product Owner      |                         |       |
+        | Rol                  | Nombre                  | Firma |
+        |----------------------|-------------------------|-------|
+        | Project Manager      | Milagros Campos         |   SI  |
+        | Lider Tecnico        |                         |   SI  |
+        | Product Owner        |                         |   SI  |
+        | QA                   | Ricardo Garcia          |   SI  |

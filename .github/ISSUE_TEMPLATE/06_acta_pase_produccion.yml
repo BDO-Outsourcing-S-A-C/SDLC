@@ -1,0 +1,110 @@
+name: STI-ST-917 Acta de Pase a Producción
+description: Documenta la aprobación y detalles del pase a producción de un release
+title: "Acta de Pase a Producción - {sistema} {módulo}"
+labels: ["documentation"]
+assignees: []
+type: "Task"
+
+body:
+
+  - type: input
+    id: release_name
+    attributes:
+      label: "Nombre del Release"
+      placeholder: "Ejemplo: vX.Y.Z"
+    validations:
+      required: true
+
+  - type: input
+    id: fecha_aprobacion
+    attributes:
+      label: "Fecha y hora de publicación"
+      placeholder: "DD/MM/AAAA HH:MM"
+    validations:
+      required: true
+
+  - type: textarea
+    id: participantes
+    attributes:
+      label: "Participantes y Responsables"
+      value: |
+        | Rol                | Nombre                  | Rol   |
+        |--------------------|-------------------------|-------|
+        | Líder de Proyecto  |                         |       |
+        | Desarrollador      |                         |       |
+        | DBA                |                         |       |
+        | ...                |                         |       |
+
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: "Objetivo"
+      description: "Describe el propósito del release y los cambios que se incorporarán en producción."
+      placeholder: "Ejemplo: Este release incluye correcciones críticas y nuevas funcionalidades."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: componentes
+    attributes:
+      label: "Componentes afectados"
+      options:
+        - label: Backend
+        - label: Frontend
+        - label: Base de datos
+        - label: Infraestructura
+
+  - type: textarea
+    id: tickets
+    attributes:
+      label: "Tickets asociados"
+      placeholder: "#1234 - Ajuste en validación de usuarios"
+      value: "#"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: validaciones
+    attributes:
+      label: "Validaciones Previas"
+      options:
+        - label: Pruebas unitarias completadas
+        - label: Pruebas de integración completadas
+        - label: Pruebas de regresión completadas
+        - label: Aprobación QA
+        - label: Documentación actualizada
+
+  - type: textarea
+    id: riesgos
+    attributes:
+      label: "Riesgos Identificados"
+      placeholder: "Ejemplo: Posible impacto en rendimiento por cambios en autenticación."
+    validations:
+      required: false
+
+  - type: textarea
+    id: participantes
+    attributes:
+      label: "Participantes y Responsables"
+      placeholder: |
+        | Rol                  | Nombre                  | Firma |
+        |----------------------|-------------------------|-------|
+        | Project Manager      | Milagros Campos         |   SI  |
+        | Lider Tecnico        |                         |   SI  |
+        | Arquitecto           | Alberto Muñoz           |   SI  |
+
+  - type: checkboxes
+    id: aprobacion
+    attributes:
+      label: "✅ Aprobación"
+      options:
+        - label: Líder de Proyecto
+        - label: QA
+        - label: DevOps
+        - label: Product Owner
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "📚 Notas Adicionales"
+      placeholder: "Ejemplo: Monitoreo intensivo durante las primeras 24 horas."

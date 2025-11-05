@@ -147,11 +147,11 @@ body:
     id: firmas
     attributes:
       label: Firmantes
-      description: "Product Owner, Sponsor, Project Manager y Lider Tecnico"
+      description: "Agrega los nombres y firmas de las personas que aprueban este cambio."
       value: |
-        |Firma|Firma|
-        |--------|--------|
-        | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
-        | Product Owner <br> Nombre <br> Cargo | Sponsor <br> Nombre <br> Cargo |
-        | <br><br><br><br><br><br><br><br><br><br> | <br><br><br><br><br><br><br><br><br><br> |
-        | Lider Tecnico <br> Nombre <br> Cargo | Project Manager <br> Nombre <br> Cargo |
+        | Rol                  | Nombre                  | Firma |
+        |----------------------|-------------------------|-------|
+        | Project Manager      | Milagros Campos         |   SI  |
+        | Lider Tecnico        |                         |   SI  |
+        | Product Owner        |                         |   SI  |
+        | Arquitecto           | Alberto Muñoz           |   SI  |
