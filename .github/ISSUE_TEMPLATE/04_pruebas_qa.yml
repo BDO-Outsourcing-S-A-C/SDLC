@@ -2,7 +2,7 @@ name: STI-ST-918 Registro de Pruebas QA
 description: Documenta las pruebas realizadas por QA para una funcionalidad o release
 title: "QA: {nombre-del-módulo-o-feature}"
 labels: ["documentation"]
-assignees: []
+assignees: ["rgarcialev"]
 type: "Task"
 
 body:

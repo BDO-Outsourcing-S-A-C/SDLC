@@ -1,0 +1,28 @@
+name: Sync Template Changes
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync to child repo 1
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: BDO-Outsourcing-S-A-C/SDLC
+          source_branch: master
+          destination_repo: BDO-Outsourcing-S-A-C/smartsys
+          destination_branch: master
+          github_token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+
+      # - name: Sync to child repo 2
+      #   uses: repo-sync/github-sync@v2
+      #   with:
+      #     source_repo: BDO-Outsourcing-S-A-C/SDLC
+      #     source_branch: master
+      #     destination_repo: <child-owner-2>/<child-repo-2>
+      #     destination_branch: master
+      #     github_token: ${{ secrets.ADD_TO_PROJECT_PAT }}
