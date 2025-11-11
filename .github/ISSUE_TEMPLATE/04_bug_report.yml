@@ -1,0 +1,56 @@
+name: STI-ST-918 Reporte de Bug
+about: Crea un reporte de bug/error para corregir el funcionamiento del sistema
+title: 'Bug-{sistema} {modulo}'
+labels: 'bug'
+body:
+  - type: textarea
+    id: descripcion-bug
+    attributes:
+      label: Descripcion del Bug/Error
+      description: Una descripcion concisa del error encontrado.
+    validations:
+      required: true
+  - type: textarea
+    id: documento-prueba
+    attributes:
+      label: Documento de prueba
+      description: Indica el documento de pruebas donde se encuentra el caso de uso del bug/error
+      placeholder: |
+        - Indica el documento aqui utilizando # <numero_issue> y el caso de uso especifico.
+    validations:
+      required: true
+  - type: textarea
+    id: pasos-reproducir
+    attributes:
+      label: Pasos para reproducir
+      description: "Detalla los pasos para reproducir el bug."
+      placeholder: |
+        1. Abrir/Ir a '...'
+        2. Click en '....'
+        3. Ubicar '....'
+        4. Ejecutar '....'
+        5. Visualiza error en '....'
+    validations:
+      required: true
+  - type: textarea
+    id: comportamiento-esperado
+    attributes:
+      label: Comportamiento esperado
+      description: Una descripcion concisa y clara de lo que se espera que el sistema haga.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Si aplica, agrega capturas de pantalla para ayudar a explicar el problema/error.
+    validations:
+      required: false
+  - type: textarea
+    id: contexto-adicional
+    attributes:
+      label: Contexto adicional
+      description: Agrega cualquier contexto adicional acerca del problema aqui.
+    validations:
+      required: false
+
