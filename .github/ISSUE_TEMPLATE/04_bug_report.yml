@@ -13,9 +13,9 @@ body:
     validations:
       required: true
   - type: textarea
-    id: documento-prueba
+    id: caso-prueba
     attributes:
-      label: Documento de prueba
+      label: Caso de prueba relacionado
       description: Indica el documento de pruebas donde se encuentra el caso de uso del bug/error
       placeholder: |
         - Indica el documento aqui utilizando # <numero_issue> y el caso de uso especifico.
