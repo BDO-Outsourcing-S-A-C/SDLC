@@ -1,6 +1,6 @@
 name: STI-ST-918 Registro de Pruebas QA
 description: Documenta las pruebas realizadas por QA para una funcionalidad o release
-title: "QA: {nombre-del-módulo-o-feature}"
+title: "STI-ST-918-{sistema}-{modulo/funcionalidad}"
 labels: ["documentation"]
 assignees: ["rgarcialev"]
 type: "Task"
@@ -8,64 +8,105 @@ type: "Task"
 body:
 
   - type: input
-    id: funcionalidad
-    attributes:
-      label: "Funcionalidad probada"
-      placeholder: "Ejemplo: Autenticación de usuarios"
-    validations:
-      required: true
-
-  - type: input
     id: version
     attributes:
       label: "Versión / Release"
       placeholder: "Ejemplo: v1.2.3"
     validations:
-      required: true
+      required: false
 
   - type: textarea
-    id: casos
+    id: casos_prueba
     attributes:
-      label: "Casos de prueba ejecutados"
-      description: "Lista los casos de prueba y su resultado."
+      label: "Documento de Casos de Prueba"
+      description: "Indica el documento donde se encuentran los casos de prueba ejecutados."
       placeholder: |
-        - Caso 1: Login con credenciales válidas → OK
-        - Caso 2: Login con credenciales inválidas → OK
-        - Caso 3: Recuperación de contraseña → Falla
-    validations:
-      required: true
+        ### Caso de Prueba: CP-001
+        **Descripción:**
+        ¿Qué se está comprobando?
+        
+        
+        **Resultado esperado:**
+        Descripción.
+        
+        
+        **Evidencia:**
+        Links o capturas.
+        
+        **Estado:**
+        - [ ] Pendiente   
+        - [ ] Aprobado  
+        - [ ] Falló 
 
-  - type: textarea
-    id: resultados
-    attributes:
-      label: "Resultados generales"
-      description: "Resumen del resultado de las pruebas."
-      placeholder: "Ejemplo: 10 casos ejecutados, 9 OK, 1 falla crítica."
-    validations:
-      required: true
+        ### Caso de Prueba: CP-002
+        **Descripción:**
+        ¿Qué se está comprobando?
+        
+        **Resultado esperado:**
+        Descripción.
+        
+        **Evidencia:**
+        Links o capturas.
+        
+        **Estado:**
+        - [ ] Pendiente   
+        - [ ] Aprobado  
+        - [ ] Falló  
 
-  - type: textarea
-    id: evidencias
-    attributes:
-      label: "Evidencias"
-      description: "Adjunta capturas o logs"
-      placeholder: "Pega imagenes o registros de logs relevantes."
-    validations:
-      required: false
+  # - type: textarea
+  #   id: funcionalidad
+  #   attributes:
+  #     label: "Funcionalidades probadas"
+  #     placeholder: |
+  #       - Autenticación de usuarios
+  #       - Registro de nuevos usuarios
+  #       - Recuperación de contraseña
+  #   validations:
+  #     required: true
 
-  - type: textarea
-    id: observaciones
-    attributes:
-      label: "Observaciones"
-      description: "Notas adicionales, riesgos o recomendaciones."
-      placeholder: "Ejemplo: Se recomienda revisar la validación de tokens."
-    validations:
-      required: false
+  # - type: textarea
+  #   id: casos
+  #   attributes:
+  #     label: "Casos de prueba ejecutados"
+  #     description: "Lista los casos de prueba y su resultado."
+  #     placeholder: |
+  #       - Caso 1: Login con credenciales válidas → OK
+  #       - Caso 2: Login con credenciales inválidas → OK
+  #       - Caso 3: Recuperación de contraseña → Falla
+  #   validations:
+  #     required: true
 
-  - type: checkboxes
-    id: aprobacion
-    attributes:
-      label: "Estado de aprobación"
-      options:
-        - label: Aprobado
-        - label: Requiere correcciones
+  # - type: textarea
+  #   id: resultados
+  #   attributes:
+  #     label: "Resultados generales"
+  #     description: "Resumen del resultado de las pruebas."
+  #     placeholder: "Ejemplo: 10 casos ejecutados, 9 OK, 1 falla crítica."
+  #   validations:
+  #     required: true
+
+  # - type: textarea
+  #   id: evidencias
+  #   attributes:
+  #     label: "Evidencias"
+  #     description: "Adjunta capturas o logs"
+  #     placeholder: "Pega imagenes o registros de logs relevantes."
+  #   validations:
+  #     required: false
+
+  # - type: textarea
+  #   id: observaciones
+  #   attributes:
+  #     label: "Observaciones"
+  #     description: "Notas adicionales, riesgos o recomendaciones."
+  #     placeholder: "Ejemplo: Se recomienda revisar la validación de tokens."
+  #   validations:
+  #     required: false
+
+  # - type: checkboxes
+  #   id: aprobacion
+  #   attributes:
+  #     label: "Estado de aprobación"
+  #     options:
+  #       - label: Aprobado
+  #       - label: Requiere correcciones

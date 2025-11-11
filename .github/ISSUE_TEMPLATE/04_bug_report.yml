@@ -3,6 +3,7 @@ description: Crea un reporte de bug/error para corregir el funcionamiento del si
 title: 'STI-ST-918-{sistema/modulo}-{titulo}'
 labels: 'bug'
 type: "Bug"
+assignees: ["rgarcialev"]
 body:
   - type: textarea
     id: descripcion-bug
@@ -41,17 +42,40 @@ body:
     validations:
       required: true
   - type: textarea
-    id: screenshots
+    id: resultado-obtenido
     attributes:
-      label: Screenshots
-      description: Si aplica, agrega capturas de pantalla para ayudar a explicar el problema/error.
+      label: Resultado obtenido
+      description: Describe lo que realmente ocurrió.
     validations:
-      required: false
+      required: true
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad
+      description: Selecciona una opción
+      options:
+        - Crítico
+        - Alto
+        - Medio
+        - Bajo
+    validations:
+      required: true
   - type: textarea
     id: contexto-adicional
     attributes:
       label: Contexto adicional
-      description: Agrega cualquier contexto adicional acerca del problema aqui.
+      description: "Detalles sobre el contexto donde ocurrió el bug."
+      placeholder: |
+        - **Entorno:** DEV / TEST / Producción
+        - **Navegador / Versión:**
+        - **Usuario utilizado (si aplica):**
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Si aplica, agrega capturas de pantalla para ayudar a explicar el problema/error.
     validations:
       required: false
 
