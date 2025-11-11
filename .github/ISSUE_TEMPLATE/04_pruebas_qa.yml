@@ -20,7 +20,7 @@ body:
     attributes:
       label: "Documento de Casos de Prueba"
       description: "Indica el documento donde se encuentran los casos de prueba ejecutados."
-      placeholder: |
+      value: |
         ### Caso de Prueba: CP-001
         **Descripción:**
         ¿Qué se está comprobando?
