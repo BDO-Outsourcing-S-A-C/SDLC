@@ -1,7 +1,8 @@
 name: STI-ST-918 Reporte de Bug
-about: Crea un reporte de bug/error para corregir el funcionamiento del sistema
-title: 'Bug-{sistema} {modulo}'
+description: Crea un reporte de bug/error para corregir el funcionamiento del sistema
+title: 'STI-ST-918-{sistema/modulo}-{titulo}'
 labels: 'bug'
+type: "Bug"
 body:
   - type: textarea
     id: descripcion-bug
