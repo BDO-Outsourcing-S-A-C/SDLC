@@ -1,6 +1,6 @@
 name: STI-ST-921 ADR - Registro de Decisión Arquitectónica
 description: Documenta una decisión arquitectónica importante para el sistema
-title: "ADR: {sistema} - {título-de-la-decisión}"
+title: "STI-ST-921-ADR-{sistema/modulo}-{título-de-la-decisión}"
 labels: ["documentation"]
 assignees: []
 type: "Task"

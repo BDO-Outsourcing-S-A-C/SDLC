@@ -1,6 +1,6 @@
 name: STI-ST-921 Historia de Usuario
 description: Crea una historia de usuario para el backlog del proyecto
-title: "HU: {nombre-corto-de-la-historia}"
+title: "STI-ST-921-HU-{nombre-corto-de-la-historia}"
 labels: ["user story"]
 assignees: []
 type: "Task"

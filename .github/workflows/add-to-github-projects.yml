@@ -14,7 +14,7 @@ jobs:
         with:
           # You can target a project in a different organization
           # to the issue
-          project-url: https://github.com/orgs/BDO-Outsourcing-S-A-C/projects/6
+          project-url: https://github.com/orgs/BDO-Outsourcing-S-A-C/projects/11
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           labeled: enhancement, bug
           label-operator: OR

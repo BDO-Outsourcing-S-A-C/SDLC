@@ -1,6 +1,6 @@
 name: "STI-ST-916 Control de Cambios"
 description: "Crea una solicitud de cambio para mejorar/agregar una funcionalidad"
-title: "CC: {sistema}/{modulo} - {titulo corto}"
+title: "STI-ST-916-{sistema/modulo}-{titulo corto}"
 labels: ["enhancement"]
 type: "Feature"
 projects: "github/6"
