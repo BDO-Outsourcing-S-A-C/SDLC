@@ -1,0 +1,164 @@
+name: Manual Export Pull Request to PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request number to export'
+        required: true
+        type: number
+      include_diff:
+        description: 'Include unified diff of changed files'
+        required: false
+        type: boolean
+        default: true
+      file_name:
+        description: 'Base name (without extension) for the exported PDF'
+        required: false
+        default: 'pull-request'
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+
+jobs:
+  export:
+    name: Build PR PDF
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Full history so diff between arbitrary base/head works
+          fetch-depth: 0
+
+      - name: Get PR metadata
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = parseInt(core.getInput('pr_number'));
+            const { data: pr } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+            core.setOutput('title', pr.title);
+            core.setOutput('body', pr.body || '');
+            core.setOutput('html_url', pr.html_url);
+            core.setOutput('head_sha', pr.head.sha);
+            core.setOutput('base_sha', pr.base.sha);
+            core.setOutput('author', pr.user?.login || '');
+            core.setOutput('created_at', pr.created_at);
+            core.setOutput('merged', pr.merged);
+            core.setOutput('merged_at', pr.merged_at || '');
+
+      - name: Collect changed files list
+        id: files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = parseInt(core.getInput('pr_number'));
+            let page = 1; const per_page = 100; let all = [];
+            while (true) {
+              const { data } = await github.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page, page
+              });
+              all = all.concat(data.map(f => ({
+                filename: f.filename,
+                status: f.status,
+                additions: f.additions,
+                deletions: f.deletions,
+                changes: f.changes
+              })));
+              if (data.length < per_page) break;
+              page++;
+            }
+            const table = ['| File | Status | + | - | Δ |','|---|---|---|---|---|']
+              .concat(all.map(f=>`| ${f.filename} | ${f.status} | ${f.additions} | ${f.deletions} | ${f.changes} |`))
+              .join('\n');
+            core.setOutput('files_table', table);
+            core.setOutput('files_json', JSON.stringify(all, null, 2));
+
+      - name: Generate unified diff
+        if: inputs.include_diff == 'true'
+        run: |
+          base='${{ steps.pr.outputs.base_sha }}'
+          head='${{ steps.pr.outputs.head_sha }}'
+          echo "Creating diff between $base and $head"
+          git diff --color=never "$base" "$head" > pr.diff
+          # Limit extremely large diffs (optional safeguard)
+          if [ $(wc -l < pr.diff) -gt 4000 ]; then
+            echo 'Diff truncated for size' >> pr.diff
+          fi
+
+      - name: Build Markdown
+        id: md
+        run: |
+          out_name='${{ inputs.file_name }}'
+          echo "# Pull Request #${{ inputs.pr_number }}" > "$out_name.md"
+          echo >> "$out_name.md"
+          echo "**Title:** ${{ steps.pr.outputs.title }}" >> "$out_name.md"
+            
+          echo "**URL:** ${{ steps.pr.outputs.html_url }}" >> "$out_name.md"
+          echo "**Author:** ${{ steps.pr.outputs.author }}" >> "$out_name.md"
+          echo "**Created At:** ${{ steps.pr.outputs.created_at }}" >> "$out_name.md"
+          echo "**Merged:** ${{ steps.pr.outputs.merged }} (at: ${{ steps.pr.outputs.merged_at }})" >> "$out_name.md"
+          echo >> "$out_name.md"
+          echo "## Description" >> "$out_name.md"
+          echo >> "$out_name.md"
+          body='${{ steps.pr.outputs.body }}'
+          if [ -n "$body" ]; then
+            printf '%s\n' "$body" >> "$out_name.md"
+          else
+            echo "_(No description provided)_" >> "$out_name.md"
+          fi
+          echo >> "$out_name.md"
+          echo "## Changed Files" >> "$out_name.md"
+          echo >> "$out_name.md"
+          printf '%s\n' "${{ steps.files.outputs.files_table }}" >> "$out_name.md"
+          if [ -f pr.diff ]; then
+            echo >> "$out_name.md"
+            echo "## Unified Diff" >> "$out_name.md"
+            echo >> "$out_name.md"
+            echo '```diff' >> "$out_name.md"
+            cat pr.diff >> "$out_name.md"
+            echo '```' >> "$out_name.md"
+          fi
+
+      - name: Save files.json
+        run: echo '${{ steps.files.outputs.files_json }}' > files.json
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Convert to PDF (pandoc)
+        run: |
+          out_name='${{ inputs.file_name }}'
+          pandoc "$out_name.md" -o "$out_name.pdf"
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ inputs.pr_number }}-pdf
+          path: ${{ inputs.file_name }}.pdf
+          retention-days: 14
+
+      - name: Upload supplemental JSON
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ inputs.pr_number }}-files-json
+          path: files.json
+
+      - name: Job summary
+        run: |
+          echo "### Export Pull Request to PDF" >> $GITHUB_STEP_SUMMARY
+          echo "PR Number: ${{ inputs.pr_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "Title: ${{ steps.pr.outputs.title }}" >> $GITHUB_STEP_SUMMARY
+          echo "PDF Artifact: pr-${{ inputs.pr_number }}-pdf" >> $GITHUB_STEP_SUMMARY
+          echo "Files JSON Artifact: pr-${{ inputs.pr_number }}-files-json" >> $GITHUB_STEP_SUMMARY
