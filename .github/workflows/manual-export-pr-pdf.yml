@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'Pull Request number to export'
-        required: true
-        type: number
+        description: 'Pull Request number to export (leave blank to auto-detect by current branch)'
+        required: false
+        type: string
       include_diff:
         description: 'Include unified diff of changed files'
         required: false
@@ -41,11 +41,46 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             try {
-              const prNumber = parseInt(core.getInput('pr_number'));
-              if (isNaN(prNumber)) {
-                throw new Error(`Invalid pr_number input: '${core.getInput('pr_number')}'`);
+              const rawInput = core.getInput('pr_number');
+              let prNumber = rawInput ? parseInt(rawInput) : undefined;
+              if (rawInput && isNaN(prNumber)) {
+                throw new Error(`Invalid pr_number input: '${rawInput}'`);
               }
-              // Use the REST namespace (github.rest) for Octokit methods
+              if (!prNumber) {
+                // Attempt auto-detect by head branch
+                const ref = context.ref; // e.g. refs/heads/feature-x
+                const branch = ref.startsWith('refs/heads/') ? ref.replace('refs/heads/','') : ref;
+                const headParam = `${context.repo.owner}:${branch}`;
+                core.info(`No pr_number provided. Attempting auto-detect for branch '${branch}'.`);
+                // Search open PRs first
+                let { data: prs } = await github.rest.pulls.list({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  state: 'open',
+                  head: headParam,
+                  per_page: 50
+                });
+                if (prs.length === 0) {
+                  // Try any state (closed/merged)
+                  const all = await github.rest.pulls.list({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    state: 'all',
+                    head: headParam,
+                    per_page: 50
+                  });
+                  prs = all.data;
+                }
+                if (prs.length === 1) {
+                  prNumber = prs[0].number;
+                  core.info(`Auto-detected PR #${prNumber} for branch '${branch}'.`);
+                } else if (prs.length > 1) {
+                  throw new Error(`Multiple PRs (${prs.length}) found for branch '${branch}'. Please specify pr_number manually.`);
+                } else {
+                  throw new Error(`No PR found for branch '${branch}'. Please specify pr_number manually.`);
+                }
+              }
+              // Fetch PR
               const { data: pr } = await github.rest.pulls.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -61,6 +96,7 @@ jobs:
               core.setOutput('created_at', pr.created_at);
               core.setOutput('merged', pr.merged);
               core.setOutput('merged_at', pr.merged_at || '');
+              core.setOutput('number', pr.number);
             } catch (err) {
               core.setFailed(`Failed to fetch PR metadata: ${err.message}`);
               throw err; // ensure step fails
@@ -73,9 +109,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             try {
-              const prNumber = parseInt(core.getInput('pr_number'));
+              // Use PR number derived in previous step (preferred)
+              const prNumberStr = '${{ steps.pr.outputs.number }}';
+              let prNumber = parseInt(prNumberStr);
               if (isNaN(prNumber)) {
-                throw new Error(`Invalid pr_number input: '${core.getInput('pr_number')}'`);
+                throw new Error(`Missing or invalid PR number from previous step: '${prNumberStr}'`);
               }
               let page = 1; const per_page = 100; let all = [];
               while (true) {
