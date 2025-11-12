@@ -1,179 +1,225 @@
-name: Build Wiki PDF
+name: Build Wiki PDFs (Individual & Combined)
 
 on:
-    workflow_dispatch:
-        inputs:
-            include_toc:
-                description: "Incluir tabla de contenidos generada"
-                type: boolean
-                default: true
-            publish_release:
-                description: "Publicar PDF en un release (si es true y se especifica tag)"
-                type: boolean
-                default: false
-            release_tag:
-                description: "Tag para el release (por ejemplo v-wiki-latest)"
-                required: false
-            page_break_style:
-                description: "Estilo de corte de página: newpage | pagebreak | none | hr"
-                required: false
-                default: newpage
-    schedule:
-        - cron: "0 3 * * *"
+  workflow_dispatch:
+    inputs:
+      include_toc:
+        description: "Incluir tabla de contenidos en el PDF combinado"
+        type: boolean
+        default: true
+      generate_combined:
+        description: "Generar el PDF consolidado"
+        type: boolean
+        default: true
+      generate_individual:
+        description: "Generar PDFs individuales por página"
+        type: boolean
+        default: true
+      publish_release:
+        description: "Publicar release con los PDFs"
+        type: boolean
+        default: false
+      release_tag:
+        description: "Tag para el release (ej: v-wiki-latest)"
+        required: false
+      page_break_style:
+        description: "Separador entre páginas en el combinado: newpage | pagebreak | none | hr"
+        required: false
+        default: newpage
+  schedule:
+    - cron: "0 3 * * *"
 
 jobs:
-    build-wiki-pdf:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout (main repo)
-              uses: actions/checkout@v4
+  build-wiki-pdfs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (main repo)
+        uses: actions/checkout@v4
 
-            - name: Clonar wiki
-              run: |
-                  set -e
-                  git clone https://github.com/BDO-Outsourcing-S-A-C/SDLC.wiki.git wiki
-                  ls -1 wiki
+      - name: Clonar wiki
+        run: |
+          set -e
+          git clone https://github.com/BDO-Outsourcing-S-A-C/SDLC.wiki.git wiki
+          ls -1 wiki || true
 
-            - name: Instalar dependencias (pandoc + LaTeX)
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y pandoc texlive texlive-latex-extra texlive-fonts-recommended
+      - name: Instalar dependencias (pandoc + LaTeX)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive texlive-latex-extra texlive-fonts-recommended
 
-            - name: Preparar script de conversión
-              run: |
-                  mkdir -p scripts
-                  cat > scripts/convert-wiki-to-pdf.sh <<'EOF'
-                  #!/usr/bin/env bash
-                  set -euo pipefail
+      - name: Preparar scripts
+        run: |
+          mkdir -p scripts dist individual
+          cat > scripts/common.sh <<'EOF'
+          sanitize() {
+            local in="$1"
+            # Reemplazar espacios por guiones, quitar caracteres no alfanum, puntos y guiones permitidos
+            echo "$in" | sed -E 's/[[:space:]]+/-/g' | sed -E 's/[^A-Za-z0-9._-]//g'
+          }
+          EOF
 
-                  WIKI_DIR="wiki"
-                  OUTPUT_DIR="dist"
-                  OUTPUT_FILE="wiki.pdf"
-                  ORDER_FILE="_order.txt"
+          cat > scripts/generate-combined.sh <<'EOF'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          source scripts/common.sh
 
-                  mkdir -p "$OUTPUT_DIR"
+          WIKI_DIR="wiki"
+          OUTPUT_DIR="dist"
+          ORDER_FILE="_order.txt"
+          OUTPUT_FILE="wiki.pdf"
 
-                  if [[ -f "$WIKI_DIR/$ORDER_FILE" ]]; then
-                    echo "Usando orden manual: $ORDER_FILE"
-                    mapfile -t FILES < <(grep -v '^\s*$' "$WIKI_DIR/$ORDER_FILE")
-                  else
-                    echo "Sin _order.txt; generando orden por defecto."
-                    if [[ -f "$WIKI_DIR/Home.md" ]]; then
-                      FIRST="Home.md"
-                    else
-                      FIRST=""
-                    fi
-                    mapfile -t ALL < <(cd "$WIKI_DIR" && ls -1 *.md | sort)
-                    FILES=()
-                    if [[ -n "$FIRST" ]]; then
-                      FILES+=( "$FIRST" )
-                      for f in "${ALL[@]}"; do
-                        [[ "$f" == "$FIRST" ]] && continue
-                        FILES+=( "$f" )
-                      done
-                    else
-                      FILES=( "${ALL[@]}" )
-                    fi
-                  fi
+          mkdir -p "$OUTPUT_DIR"
 
-                  echo "Archivos:"
-                  printf ' - %s\n' "${FILES[@]}"
+          if [[ -f "$WIKI_DIR/$ORDER_FILE" ]]; then
+            mapfile -t FILES < <(grep -v '^\s*$' "$WIKI_DIR/$ORDER_FILE")
+          else
+            if [[ -f "$WIKI_DIR/Home.md" ]]; then
+              FIRST="Home.md"
+            else
+              FIRST=""
+            fi
+            mapfile -t ALL < <(cd "$WIKI_DIR" && ls -1 *.md | sort)
+            FILES=()
+            if [[ -n "$FIRST" ]]; then
+              FILES+=( "$FIRST" )
+              for f in "${ALL[@]}"; do
+                [[ "$f" == "$FIRST" ]] && continue
+                FILES+=( "$f" )
+              done
+            else
+              FILES=( "${ALL[@]}" )
+            fi
+          fi
 
-                  CONCAT="$OUTPUT_DIR/combined.md"
-                  {
-                    echo "# Documentación de la Wiki"
-                    echo ""
-                    echo "Generado automáticamente: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
-                    echo ""
-                  } > "$CONCAT"
+          echo "Archivos para combinado:"
+          printf ' - %s\n' "${FILES[@]}"
 
-                  INCLUDE_TOC="${INCLUDE_TOC:-true}"
-                  PAGE_BREAK_STYLE="${PAGE_BREAK_STYLE:-newpage}"
-                  # Estilos posibles:
-                  # newpage   => inserta \newpage (LaTeX)
-                  # pagebreak => inserta \pagebreak (LaTeX)
-                  # hr        => inserta '---' (línea horizontal, NO corte real)
-                  # none      => no inserta separador
+          CONCAT="$OUTPUT_DIR/combined.md"
+          {
+            echo "# Documentación de la Wiki"
+            echo ""
+            echo "Generado automáticamente: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+            echo ""
+          } > "$CONCAT"
 
-                  add_page_break () {
-                    local style="$1"
-                    case "$style" in
-                      newpage)
-                        echo "" >> "$CONCAT"
-                        echo "\\newpage" >> "$CONCAT"
-                        echo "" >> "$CONCAT"
-                        ;;
-                      pagebreak)
-                        echo "" >> "$CONCAT"
-                        echo "\\pagebreak" >> "$CONCAT"
-                        echo "" >> "$CONCAT"
-                        ;;
-                      hr)
-                        echo "" >> "$CONCAT"
-                        echo "---" >> "$CONCAT"
-                        echo "" >> "$CONCAT"
-                        ;;
-                      none|*)
-                        # Nada
-                        ;;
-                    esac
-                  }
+          INCLUDE_TOC="${INCLUDE_TOC:-true}"
+          PAGE_BREAK_STYLE="${PAGE_BREAK_STYLE:-newpage}"
 
-                  if [[ "$INCLUDE_TOC" == "true" ]]; then
-                    # Usaremos el TOC nativo de pandoc con --toc, así que no colocamos [TOC] aquí
-                    echo "" >> "$CONCAT"
-                  fi
+          add_page_break () {
+            local style="$1"
+            case "$style" in
+              newpage)    echo "\\newpage" >> "$CONCAT";;
+              pagebreak)  echo "\\pagebreak" >> "$CONCAT";;
+              hr)         echo "---" >> "$CONCAT";;
+              none|*)     ;;
+            esac
+            echo "" >> "$CONCAT"
+          }
 
-                  TOTAL=${#FILES[@]}
-                  for i in "${!FILES[@]}"; do
-                    f="${FILES[$i]}"
-                    echo "" >> "$CONCAT"
-                    echo "<!-- File: $f -->" >> "$CONCAT"
-                    # Agregar título del archivo (si el archivo no tiene heading principal)
-                    # Detectar si comienza con '#'
-                    if ! grep -q '^#' "$WIKI_DIR/$f"; then
-                      base_title="${f%.md}"
-                      echo "# $base_title" >> "$CONCAT"
-                      echo "" >> "$CONCAT"
-                    fi
-                    cat "$WIKI_DIR/$f" >> "$CONCAT"
-                    # Insertar separador si no es el último
-                    if (( i < TOTAL - 1 )); then
-                      add_page_break "$PAGE_BREAK_STYLE"
-                    fi
-                  done
+          TOTAL=${#FILES[@]}
+          for i in "${!FILES[@]}"; do
+            f="${FILES[$i]}"
+            echo "" >> "$CONCAT"
+            echo "<!-- File: $f -->" >> "$CONCAT"
+            if ! grep -q '^#' "$WIKI_DIR/$f"; then
+              base_title="${f%.md}"
+              echo "# $base_title" >> "$CONCAT"
+              echo "" >> "$CONCAT"
+            fi
+            cat "$WIKI_DIR/$f" >> "$CONCAT"
+            if (( i < TOTAL - 1 )); then
+              add_page_break "$PAGE_BREAK_STYLE"
+            fi
+          done
 
-                  echo "Convirtiendo a PDF..."
-                  if [[ "$INCLUDE_TOC" == "true" ]]; then
-                    pandoc "$CONCAT" --toc -V geometry:margin=2cm -o "$OUTPUT_DIR/$OUTPUT_FILE"
-                  else
-                    pandoc "$CONCAT" -V geometry:margin=2cm -o "$OUTPUT_DIR/$OUTPUT_FILE"
-                  fi
+          echo "Convirtiendo combinado a PDF..."
+          if [[ "$INCLUDE_TOC" == "true" ]]; then
+            pandoc "$CONCAT" --toc -V geometry:margin=2cm -o "$OUTPUT_DIR/$OUTPUT_FILE"
+          else
+            pandoc "$CONCAT" -V geometry:margin=2cm -o "$OUTPUT_DIR/$OUTPUT_FILE"
+          fi
+          echo "Generado: $OUTPUT_DIR/$OUTPUT_FILE"
+          EOF
+          chmod +x scripts/generate-combined.sh
 
-                  echo "PDF listo: $OUTPUT_DIR/$OUTPUT_FILE"
-                  EOF
-                  chmod +x scripts/convert-wiki-to-pdf.sh
+          cat > scripts/generate-individual.sh <<'EOF'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          source scripts/common.sh
 
-            - name: Ejecutar conversión
-              env:
-                  INCLUDE_TOC: ${{ inputs.include_toc }}
-                  PAGE_BREAK_STYLE: ${{ inputs.page_break_style }}
-              run: |
-                  ./scripts/convert-wiki-to-pdf.sh
+          WIKI_DIR="wiki"
+          OUT_DIR="individual"
 
-            - name: Subir artefacto
-              uses: actions/upload-artifact@v4
-              with:
-                  name: wiki-pdf
-                  path: dist/wiki.pdf
-                  retention-days: 14
+          mkdir -p "$OUT_DIR"
 
-            - name: Publicar release (opcional)
-              if: ${{ inputs.publish_release == true && inputs.release_tag != '' }}
-              uses: softprops/action-gh-release@v2
-              with:
-                  tag_name: ${{ inputs.release_tag }}
-                  name: "Wiki PDF ${{ inputs.release_tag }}"
-                  files: dist/wiki.pdf
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          shopt -s nullglob
+          FILES=( "$WIKI_DIR"/*.md )
+          if (( ${#FILES[@]} == 0 )); then
+            echo "No hay archivos .md en la wiki."
+            exit 0
+          fi
+
+          echo "Generando PDFs individuales..."
+          for path in "${FILES[@]}"; do
+            base="$(basename "$path")"
+            name_no_ext="${base%.md}"
+            safe_name="$(sanitize "$name_no_ext").pdf"
+            # Crear archivo temporal para asegurar encabezado si falta
+            TMP="$(mktemp)"
+            if grep -q '^#' "$path"; then
+              cat "$path" > "$TMP"
+            else
+              echo "# $name_no_ext" > "$TMP"
+              echo "" >> "$TMP"
+              cat "$path" >> "$TMP"
+            fi
+            pandoc "$TMP" -V geometry:margin=2cm -o "$OUT_DIR/$safe_name"
+            rm "$TMP"
+            echo " -> $OUT_DIR/$safe_name"
+          done
+          EOF
+          chmod +x scripts/generate-individual.sh
+
+      - name: Generar PDF combinado (opcional)
+        if: ${{ inputs.generate_combined == true }}
+        env:
+          INCLUDE_TOC: ${{ inputs.include_toc }}
+          PAGE_BREAK_STYLE: ${{ inputs.page_break_style }}
+        run: |
+          ./scripts/generate-combined.sh
+
+      - name: Generar PDFs individuales (opcional)
+        if: ${{ inputs.generate_individual == true }}
+        run: |
+          ./scripts/generate-individual.sh
+
+      - name: Empaquetar ZIP (si hay individuales)
+        if: ${{ inputs.generate_individual == true }}
+        run: |
+          cd individual
+          zip -r ../dist/wiki-individual-pdfs.zip ./*
+          cd ..
+          ls -lh dist
+
+      - name: Subir artefactos
+        uses: actions/upload-artifact@v4
+        with:
+          name: wiki-pdfs
+          path: |
+            dist/wiki.pdf
+            dist/wiki-individual-pdfs.zip
+            individual/*.pdf
+          retention-days: 14
+        continue-on-error: true
+
+      - name: Publicar release (opcional)
+        if: ${{ inputs.publish_release == true && inputs.release_tag != '' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: "Wiki PDFs ${{ inputs.release_tag }}"
+          files: |
+            dist/wiki.pdf
+            dist/wiki-individual-pdfs.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
