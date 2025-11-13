@@ -89,7 +89,6 @@ body:
         - label: Líder de Proyecto
         - label: QA
         - label: DevOps
-        | Líder Técnico        |                         |   SI  |
 
   - type: textarea
     id: notas
