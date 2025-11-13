@@ -40,7 +40,8 @@ jobs:
 
       - name: Install dependencies
         working-directory: .github/pr-export
-        run: npm ci
+        run: |
+          npm install --no-audit --no-fund
 
       - name: Generate PDF
         working-directory: .github/pr-export
