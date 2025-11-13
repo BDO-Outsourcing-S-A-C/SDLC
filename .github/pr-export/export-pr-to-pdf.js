@@ -267,10 +267,7 @@ function buildHtml(data) {
     </div>
   </div>
 
-  <footer>Página generada el ${fmtDate(new Date().toISOString())} - PR #${pr.number} ${owner}/${repo} - Página <span class="pageNumber"></span> de <span class="totalPages"></span></footer>
-  <script>
-    // (Opcional) lógica adicional para numeración avanzada si se integra más adelante.
-  </script>
+  <footer>Página generada el ${fmtDate(new Date().toISOString())} - PR #${pr.number} ${owner}/${repo}</footer>
 </body>
 </html>`;
   return html;
@@ -303,7 +300,11 @@ async function main() {
   const htmlPath = path.join(outDir, `pr-${prNumber}.html`);
   fs.writeFileSync(htmlPath, html, 'utf8');
 
-  const browser = await puppeteer.launch({ headless: 'new' });
+  // Flags para entorno CI sin sandbox
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: 'networkidle0' });
   const pdfPath = path.join(outDir, `pr-${prNumber}.pdf`);
