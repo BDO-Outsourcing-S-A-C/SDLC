@@ -1,6 +1,6 @@
 name: STI-ST-917 Acta de aceptación para pase a producción
 description: Crea un acta de aceptación para realizar el pase a producción de un sistema/módulo
-title: "Acta de Aceptación-{sistema} {modulo}"
+title: "STI-ST-917-Aceptación-{sistema}-{modulo}"
 labels: ["documentation"]
 assignees: []
 type: "Task"
@@ -106,6 +106,6 @@ body:
         | Rol                  | Nombre                  | Firma |
         |----------------------|-------------------------|-------|
         | Project Manager      | Milagros Campos         |   SI  |
-        | Lider Tecnico        |                         |   SI  |
+        | Líder Tecnico        |                         |   SI  |
         | Product Owner        |                         |   SI  |
         | QA                   | Ricardo Garcia          |   SI  |

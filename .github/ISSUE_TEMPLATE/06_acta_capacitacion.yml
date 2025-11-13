@@ -1,0 +1,105 @@
+name: "STI-ST-921 Acta de Capacitación"
+description: "Crea un acta para formalizar una capacitación o presentación realizada."
+title: "STI-ST-921-Capacitación-{sistema}-{módulo}"
+labels: ["documentation"]
+type: "Task"
+assignees: []
+
+body:
+  - type: input
+    id: programa
+    attributes:
+      label: Sistema
+      description: Nombre del sistema o tema de la capacitación
+      placeholder: "Novedades, MyReporting ..."
+    validations:
+      required: true
+
+  - type: input
+    id: fecha
+    attributes:
+      label: Fecha
+      description: Fecha de la capacitación (DD-MM-AAAA)
+      placeholder: "01-01-2025"
+    validations:
+      required: true
+
+  - type: input
+    id: hora
+    attributes:
+      label: Hora
+      description: Hora de inicio y fin
+      placeholder: "10:00 a.m. - 10:30 a.m."
+    validations:
+      required: true
+
+  - type: input
+    id: lugar
+    attributes:
+      label: Lugar
+      description: Ubicación física o virtual
+      placeholder: "Vía Call Conference (M. Teams)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: asistentes
+    attributes:
+      label: Asistentes
+      description: Lista de asistentes (nombre, rol, siglas, asistencia)
+      value: |
+        | Nombre           | Rol          | Asistencia |
+        |------------------|--------------|------------|
+        | Nombre y apellido | Presentador | SI |
+    validations:
+      required: true
+
+  - type: textarea
+    id: puntos_abordados
+    attributes:
+      label: Puntos Abordados
+      description: Enumera los temas tratados durante la capacitación
+      placeholder: |
+        1. Activación del registro delegado de liquidaciones se realiza a nivel de empresa y por usuario.
+        2. Es necesario definir qué subtipos de liquidaciones pueden ser registrados de forma delegada.
+        3. Se recomienda marcar las liquidaciones delegadas con un sufijo o distintivo para evitar confusiones.
+        ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: recomendaciones
+    attributes:
+      label: Recomendaciones
+      description: Acciones sugeridas o buenas prácticas
+      placeholder: |
+        - Marcar claramente las liquidaciones delegadas en el sistema MyContsys.
+        - Gestionar permisos de forma centralizada desde la empresa.
+        - Reasignar permisos tras cualquier desactivación de la función.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acuerdos_pendientes
+    attributes:
+      label: Acuerdos Pendientes
+      description: Responsables y acuerdos realizados durante la reunión de capacitación
+      value: |
+        | Responsable    | Acuerdo                      | Estado         | Fecha cumplimiento |
+        |----------------|------------------------------|----------------|--------------------|  
+        | Nombres y apellidos | Describe el acuerdo | Pendiente, Realizado, Rechazado | DD-MM-AAAA |
+    validations:
+      required: false
+
+  - type: dropdown
+    id: estado_seguimiento
+    attributes:
+      label: Estado general del seguimiento
+      description: Selecciona el estado actual del seguimiento de la capacitación
+      options:
+        - Pendiente
+        - En progreso
+        - Completado
+        - Bloqueado
+    validations:
+      required: true

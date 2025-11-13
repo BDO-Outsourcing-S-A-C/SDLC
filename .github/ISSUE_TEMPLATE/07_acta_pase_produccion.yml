@@ -1,6 +1,6 @@
 name: STI-ST-917 Acta de Pase a Producción
 description: Documenta la aprobación y detalles del pase a producción de un release
-title: "Acta de Pase a Producción - {sistema} {módulo}"
+title: "STI-ST-917-Pase a Producción-{sistema}-{módulo}"
 labels: ["documentation"]
 assignees: []
 type: "Task"
@@ -22,17 +22,6 @@ body:
     validations:
       required: true
 
-  - type: textarea
-    id: participantes
-    attributes:
-      label: "Participantes y Responsables"
-      value: |
-        | Rol                | Nombre                  | Rol   |
-        |--------------------|-------------------------|-------|
-        | Líder de Proyecto  |                         |       |
-        | Desarrollador      |                         |       |
-        | DBA                |                         |       |
-        | ...                |                         |       |
 
   - type: textarea
     id: objetivo
@@ -100,7 +89,7 @@ body:
         - label: Líder de Proyecto
         - label: QA
         - label: DevOps
-        - label: Product Owner
+        | Líder Técnico        |                         |   SI  |
 
   - type: textarea
     id: notas
