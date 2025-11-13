@@ -1,0 +1,62 @@
+name: Export Pull Request to PDF Completo
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Número del Pull Request a exportar"
+        required: true
+        type: number
+      exclude_diff:
+        description: "Excluir diffs completos (solo estadísticas)"
+        required: false
+        type: boolean
+      summary_only:
+        description: "Generar solo resumen (sin commits detallados, diffs ni comentarios)"
+        required: false
+        type: boolean
+      exclude_review_comments:
+        description: "Excluir comentarios en línea de revisión"
+        required: false
+        type: boolean
+      force_large_diffs:
+        description: "Forzar inclusión de diffs muy grandes"
+        required: false
+        type: boolean
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: .github/pr-export/package.json
+
+      - name: Install dependencies
+        working-directory: .github/pr-export
+        run: npm ci
+
+      - name: Generate PDF
+        working-directory: .github/pr-export
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_FULL_NAME: ${{ github.repository }}
+        run: |
+          node export_pr_pdf.js --pr ${{ inputs.pr_number }} \
+            ${{ inputs.exclude_diff && '--exclude-diff' || '' }} \
+            ${{ inputs.summary_only && '--summary-only' || '' }} \
+            ${{ inputs.exclude_review_comments && '--exclude-review-comments' || '' }} \
+            ${{ inputs.force_large_diffs && '--force-large-diffs' || '' }}
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ inputs.pr_number }}-pdf
+          path: .github/pr-export/out/pr-${{ inputs.pr_number }}.pdf
+          retention-days: 30
