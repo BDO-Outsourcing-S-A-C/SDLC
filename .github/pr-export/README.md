@@ -15,20 +15,16 @@
 ## Uso local
 
 ```bash
-export GITHUB_TOKEN=ghp_xxx # token con permiso repo
+export GITHUB_TOKEN=ghp_xxx
 export REPO_FULL_NAME=BDO-Outsourcing-S-A-C/SDLC
-node export-pr-pdf.js --pr 123
+node export-pr-to-pdf.js --pr 123
 ```
 
 El PDF se genera en `out/pr-123.pdf`.
 
-## Firma electrónica
+## Renderizado de Markdown
 
-El PDF incluye un bloque al final para completar firmas de: Responsable Técnico, QA, Seguridad, Product Owner, Fecha y Observaciones.
-
-## Personalización
-
-Puede editar estilos en la sección `<style>` del HTML dentro de `export-pr-pdf.js`.
+La descripción del PR ahora se renderiza como HTML utilizando `markdown-it`. Comentarios y revisiones siguen en texto plano escapado para seguridad (se pueden habilitar más adelante).
 
 ## Flags disponibles
 
@@ -37,8 +33,12 @@ Puede editar estilos en la sección `<style>` del HTML dentro de `export-pr-pdf.
 - `--exclude-review-comments`
 - `--force-large-diffs`
 
-## Próximas mejoras sugeridas (no implementadas aún)
+## Seguridad
 
-- Enviar automáticamente el PDF a sistema externo de firma.
-- Añadir watermark de ambiente.
-- Publicar hash SHA256 del PDF como comentario en el PR.
+Se aplica una sanitización básica al HTML generado de la descripción (elimina `<script>` y atributos que empiezan con `on`). Para requisitos más estrictos puede añadirse una librería adicional.
+
+## Próximas mejoras sugeridas
+
+- Renderizar también comentarios y bodies de reviews en Markdown.
+- Watermark de entorno.
+- Hash SHA256 publicado como comentario.
